@@ -16,7 +16,7 @@ npm run electron:dev
 npm run start:electron:reload
 
 # Package for: windows, ubuntu/debian and mac os
-npm run pack
+npm run dist
 ```
 
 
