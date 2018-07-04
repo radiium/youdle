@@ -1,14 +1,19 @@
 appId: com.radiium.youdle
-copyright: "LICENSE MIT "
+copyright: "LICENSE MIT"
 productName: youdle
 # forceCodeSigning: true
 asar: true
 artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 compression: maximum
+npmRebuild: true
+nodeGypRebuild: false
+# files:
+#   - "node_modules/ffmpeg-static/"
 directories:
   app: "dist"
   output: "release"
   buildResources: "build"
+
 mac:
   icon: "build/icons/mac/turntable1024.icns"
   category: "public.app-category.entertainment"
