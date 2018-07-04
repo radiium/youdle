@@ -1,0 +1,29 @@
+{
+    "name": "youdle",
+    "version": "0.0.1",
+    "license": "MIT",
+    "description": "Electron angular boilerplate",
+    "homepage": "https://github.com/radiium/youdle",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/radiium/youdle.git"
+    },
+    "author": {
+        "name": "radiium",
+        "email": "remip.dev@gmail.com",
+        "url": "https://github.com/radiium"
+    },
+    "keywords": [
+        "electron",
+        "angular 6",
+        "typescript"
+    ],
+    "private": true,
+    "main": "electron.js",
+    "dependencies": {
+        "electron-context-menu": "^0.9.1",
+        "electron-json-storage": "^4.0.2",
+        "js-video-url-parser": "^0.2.7"
+
+    }
+}

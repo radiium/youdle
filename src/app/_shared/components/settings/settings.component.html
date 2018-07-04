@@ -1,0 +1,18 @@
+<div class="settingsWrapper">
+
+    <div class=""></div>
+
+    <div class="contentRow" *ngIf="error">
+        <span>{{ error }}</span>
+    </div>
+
+    <div class="settingsRow">
+        <div class="rowLabel">Save file(s) in: </div>
+        <div class="content rowText" (click)="editDLPath()">
+            <div class="rowText">{{ filePath }}</div>
+            <button class="rowBtn">
+                <mat-icon svgIcon="pencil"></mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

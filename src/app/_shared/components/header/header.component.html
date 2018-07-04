@@ -1,0 +1,27 @@
+<mat-toolbar class="header">
+    <mat-toolbar-row class="rowHeader" *ngIf="appState.selectedTab === 0">
+        <input class="inputBar" type="text" #inputBar
+            [disabled]="appState.selectedTab === 1"
+            [class.clearable]="appState.inputValue"
+            placeholder="Paste video or playlist url or id.."
+            [ngModel]="appState.inputValue"
+            (ngModelChange)="onInputChange($event)"
+            [ngModelOptions]="{standalone: true}">
+
+        <button class="clearBtn" *ngIf="inputBar.value" (click)="clearInput()">
+            <mat-icon class="clearBtnIco" svgIcon="close"></mat-icon>
+        </button>
+
+        <button class="settingsBtn" (click)="openSettings()">
+            <mat-icon svgIcon="settings"></mat-icon>
+        </button>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row class="rowHeader" *ngIf="appState.selectedTab === 1">
+        <div class="settingsHeader">Settings</div>
+        <button class="settingsBtn" *ngIf="appState.selectedTab === 1" (click)="closeSettings()">
+            <mat-icon svgIcon="arrow-left-thick"></mat-icon>
+        </button>
+    </mat-toolbar-row>
+
+</mat-toolbar>

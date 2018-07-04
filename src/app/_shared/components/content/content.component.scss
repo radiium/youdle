@@ -1,0 +1,161 @@
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    color: white !important;
+
+    .contentToolbar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        height: 50px;
+        min-height: 50px;
+
+        .loader {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .notFoundMsg {
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .toolbarControl {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            width: 100%;
+            height: 100%;
+
+            &.borderToolBar {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            }
+
+            .masterSelect {
+                align-self: center;
+                margin-left: 20px;
+            }
+
+            .counter {
+                align-self: center;
+                font-size: 1.2rem;
+                margin-left: 20px;
+            }
+
+            .control {
+                align-self: center;
+                color: white !important;
+                margin-right: 10px;
+                transition: opacity ease 100ms;
+
+                &.anim {
+                    animation: bounce 1s;
+                }
+
+                &.controlDisabled {
+                    // color: rgb(226, 226, 226) !important;
+                    opacity: 0.8;
+                }
+
+                .controlIcon {
+                    margin-right: 10px;
+                }
+
+                .controlText {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+
+    .contentBox {
+        overflow: auto;
+
+        .videoListItem {
+            width: 100%;
+            // height: 50px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            padding: 5px 0 5px 0;
+            font-size: 0.9rem;
+
+            &.even {
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+            &.odd {
+                // background-color: rgba(0, 0, 0, 0.3);
+            }
+
+            .videoSelected {
+                align-self: center;
+                margin-left: 20px;
+            }
+
+            .videoThumb {
+                align-self: center;
+                height: 50px;
+                width: 50px;
+                display: flex;
+                flex-direction: column;
+                margin-right: 20px;
+                margin-left: 20px;
+
+                img {
+                    object-fit: cover;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+            }
+
+            .videoInfos {
+                overflow: hidden;
+                padding: 3px 0 3px 0;
+                // line-height: 1.4rem;
+
+                .videoDuration {
+                    border: 1px solid white;
+                    padding: 0 5px 0 5px;
+                    font-size: 0.7rem;
+                }
+
+                .videoTitle {
+                }
+
+                .videoSubInfos {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    font-size: 0.8rem;
+
+                    .videoDuration {}
+                    .videoDate {}
+                }
+            }
+        }
+    }
+}
+
+@keyframes bounce {
+	0%, 20%, 60%, 100% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+	}
+
+	40% {
+		-webkit-transform: translateY(-10px);
+		transform: translateY(-10px);
+	}
+
+	80% {
+		-webkit-transform: translateY(-5px);
+		transform: translateY(-5px);
+	}
+}

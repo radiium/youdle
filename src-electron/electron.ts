@@ -1,0 +1,274 @@
+// Setup default environment
+
+require('events').EventEmitter.prototype._maxListeners = 0;
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+console.log(`Electron launching with NODE_ENV: ${process.env.NODE_ENV}`);
+
+
+// Import dependencies
+import { app, BrowserWindow, ipcMain, Menu, dialog, clipboard } from 'electron';
+import contextMenu = require('electron-context-menu');
+import storage = require('electron-json-storage');
+
+import fs = require('fs-extra');
+import url = require('url');
+import path = require('path');
+import ytdl = require('ytdl-core');
+import ffmpeg = require('fluent-ffmpeg');
+
+import { devMenuTemplate } from './menu/dev_menu.template';
+import { fileMenuTemplate } from './menu/file_menu.template';
+import { editMenuTemplate } from './menu/edit_menu.template';
+import { openSettings } from './settings/settings';
+
+
+
+// ffmpeg Binary
+
+// method 1
+import ffmpegStatic = require('ffmpeg-static');
+console.log(ffmpegStatic.path);
+// https://stackoverflow.com/questions/38361996/how-can-i-bundle-a-precompiled-binary-with-electron/43389268#43389268
+//  to find the ffmpeg binary for the platform you are running
+// in any scenario (whether or not the app is bundled or you are in development)
+// require('ffmpeg-static').path.replace('app.asar', 'app.asar.unpacked')
+
+// method 2
+const bin = require('ffmpeg-binaries').ffmpegPath();
+
+
+
+
+
+// Init variable
+let mainWindow: any = null;
+const menus: any[] = [];
+const isDev = process.env.NODE_ENV === 'development' ? true : false;
+
+
+// Init context menu
+if (isDev) {
+    contextMenu({
+        prepend: (params, browserWindow) => []
+    });
+}
+
+
+// Create main window
+const createMainWindow = async () => {
+
+    // Initialize main window
+    mainWindow = new BrowserWindow({
+        width: 500,
+        height: 125,
+        minWidth: 500,
+        minHeight: 125,
+        // transparent: true,
+        // frame: false,
+        // titleBarStyle: 'hiddenInset', // 'customButtonsOnHover',
+        // thickFrame: false,
+        // backgroundColor: '#3D444C',
+        darkTheme: true,
+        // vibrancy: 'dark',
+        webPreferences: {
+            nodeIntegration: true,
+            // contextIsolation: true,
+            // experimentalFeatures: true // For prevent angular/animation error
+        }
+    });
+
+    // DEV mode => Load app with live reload
+    if (isDev) {
+        require('electron-reload')(__dirname, {
+            electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+            hardResetMethod: 'exit'
+        });
+        mainWindow.loadURL('http://localhost:4200');
+        mainWindow.webContents.openDevTools();
+
+    // PROD mode => Load app
+    } else {
+        mainWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'index.html'),
+            protocol: 'file:',
+            slashes: true,
+        }));
+    }
+
+    mainWindow.on('closed', () => mainWindow = null);
+    mainWindow.once('ready-to-show', () => mainWindow.show());
+
+
+    // Build menus
+    menus.push(fileMenuTemplate);
+    menus.push(editMenuTemplate);
+    if (isDev) {
+        menus.push(devMenuTemplate);
+    }
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+    // console.log('Data path:', storage.getDataPath());
+};
+
+
+
+// On app is ready
+app.on('ready', () => {
+    createMainWindow();
+
+    const width = mainWindow.getSize()[0];
+    const height = (process.platform === 'darwin') ? 125 : 100;
+    mainWindow.setSize(width, height);
+    // mainWindow.setMinSize(width, height);
+    // mainWindow.setMaxSize(width, height);
+});
+
+// On close app event
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+// Recreate window when icon is clicked
+app.on('activate', () => {
+    if (mainWindow === null) {
+        createMainWindow();
+    }
+});
+
+// Clear cahe and cookie session before quit
+app.on('before-quit', () => {
+    if (process.env.NODE_ENV !== 'development') {
+        mainWindow.webContents.session.clearStorageData();
+    }
+});
+
+app.on('browser-window-focus', (event, focusedWindow) => {
+
+    console.log('browser-window-focus');
+    console.log('clipboard', clipboard.readText());
+    event.sender.send('sendClipboardValue', clipboard.readText());
+});
+
+
+// ----------------------------------------------------------------------------
+// App state management
+const appStateDataName = 'app-state';
+const saveAppState = 'saveAppState';
+const getAppState = 'getAppState';
+const getAppStateResp = 'getAppStateResp';
+
+
+ipcMain.on(saveAppState, (event, data) => {
+    storage.set(appStateDataName, data, (error) => {
+        handleError(error, event.sender, data);
+    });
+});
+
+
+ipcMain.on(getAppState, (event, arg) => {
+    storage.get(appStateDataName, (error, data) => {
+        handleError(error, event.sender, data);
+        event.sender.send(getAppStateResp, data);
+    });
+});
+
+
+
+
+// ----------------------------------------------------------------------------
+// Get os type management
+ipcMain.on('openSettings', (event, data) => {
+    openSettings();
+});
+
+
+// ----------------------------------------------------------------------------
+// Download management
+
+ipcMain.on('onDownload', (event, arg) => {
+    console.log('=========================');
+    console.log('onDownload');
+    event.sender.send('parseUrlResp');
+
+});
+
+
+
+
+// ----------------------------------------------------------------------------
+// Settings
+
+// Resolve file path
+ipcMain.on('send-get-save-path', (event, arg) => {
+
+    const edit     = arg.edit;
+    const filePath = arg.filePath;
+    const defaultPath = app.getPath('downloads') || '';
+
+    const choosenPath = filePath ? filePath : defaultPath;
+
+    if (edit) {
+        dialog.showOpenDialog({
+            title: 'Select folder',
+            defaultPath: choosenPath,
+            filters: [ {name: 'All Files', extensions: ['.mp3']} ],
+            properties: ['openDirectory', 'createDirectory']
+        },
+        (selFilePath) => {
+            let selPath = selFilePath[0];
+            if (!selPath) {
+                selPath = defaultPath;
+            }
+            event.sender.send('get-save-path', selPath);
+        });
+    } else {
+        event.sender.send('get-save-path', choosenPath);
+    }
+});
+
+
+// ----------------------------------------------------------------------------
+// Get os type management
+ipcMain.on('getOsType', (event, data) => {
+    event.sender.send('getOsTypeResp', process.platform);
+});
+
+
+// ----------------------------------------------------------------------------
+// Errors handlers
+const handleError = (error, sender, data?) => {
+    if (error) {
+        const errorResp = {
+            error: error,
+            customData: data
+        };
+        sender.send('onElectronError', errorResp);
+        throw error;
+    }
+};
+
+const errorHandler = function(error) {
+    const msg: any = {
+        type : 'error',
+        title : 'Uncaught Exception',
+        buttons: ['ok', 'close'],
+        width : 400
+    };
+
+    switch (typeof error) {
+        case 'object':
+            msg.title = 'Uncaught Exception: ' + error.code;
+            msg.message = error.message;
+            break;
+        case 'string':
+            msg.message = error;
+            break;
+    }
+
+    msg.detail = 'Please check the console log for more details.';
+    mainWindow.send('onElectronError', msg);
+};
+
+process.on('uncaughtException', errorHandler);
