@@ -10,13 +10,13 @@
 ng serve
 
 # Run in electron
-> npm run electron:dev
+npm run electron:dev
 
 # Run in electron with live reload
-> npm run start:electron:reload
+npm run start:electron:reload
 
 # Package for: windows, ubuntu/debian and mac os
-> npm run pack
+npm run pack
 ```
 
 
