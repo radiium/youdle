@@ -5,17 +5,19 @@
 
 ## Development:
 
-#### Run in browser at 'http://localhost:4200' (*Electron features not available in this mode*)
-> ng serve
+```bash
+# Run in browser at 'http://localhost:4200' (*Electron features not available in this mode*)
+ng serve
 
-#### Run in electron
+# Run in electron
 > npm run electron:dev
 
-#### Run in electron with live reload
+# Run in electron with live reload
 > npm run start:electron:reload
 
-#### Package for: windows, ubuntu/debian and mac os
+# Package for: windows, ubuntu/debian and mac os
 > npm run pack
+```
 
 
 ## Made with
