@@ -1,8 +1,6 @@
+<div class="contentWrapper" *ngIf="appState && videoList">
 
-
-
-<div class="contentWrapper">
-
+    <!-- Toolbar -->
     <div class="contentToolbar">
 
         <div class="loader" *ngIf="appState.loader">
@@ -14,28 +12,28 @@
         </div>
 
         <div class="toolbarControl" *ngIf="!appState.notFound && !appState.loader"
-            [class.borderToolBar]="appState?.videoList?.length > 0">
-            <mat-checkbox class="masterSelect" *ngIf="appState?.videoList?.length > 1"
-                (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
+            [class.borderToolBar]="videoList.length > 0">
+            <mat-checkbox class="masterSelect" *ngIf="videoList.length > 1"
+                (change)="onSelectAll($event)"
+                [checked]="allSelected"
+                [indeterminate]="interSelected"
                 [color]="'primary'">
             </mat-checkbox>
 
-            <div class="counter" *ngIf="appState?.videoList?.length > 0">
-                <span *ngIf="appState?.videoList?.length > 1">{{ this.selection.selected.length }}/</span>
-                <span>{{ appState?.videoList?.length }} </span>
+            <div class="counter" *ngIf="videoList.length > 0">
+                <span *ngIf="videoList.length > 1">{{ selectedCount }}/</span>
+                <span>{{ videoList.length }} </span>
                 <span> Track</span>
-                <span *ngIf="appState?.videoList?.length > 1">s</span>
+                <span *ngIf="videoList.length > 1">s</span>
             </div>
 
-            <div class="flexSpacer" *ngIf="appState?.videoList?.length > 0"></div>
+            <div class="flexSpacer" *ngIf="videoList.length > 0"></div>
 
             <button class="control" mat-button
-                *ngIf="appState?.videoList?.length > 0"
-                [disabled]="!selection.hasValue() && appState?.videoList?.length > 1"
-                [class.anim]="selection.hasValue() || appState?.videoList?.length === 1"
-                [class.controlDisabled]="!selection.hasValue() && appState?.videoList?.length > 1"
+                *ngIf="videoList.length > 0"
+                [class.anim]="selectedCount > 0"
+                [disabled]="selectedCount === 0"
+                [class.controlDisabled]="selectedCount === 0"
                 (click)="download()">
                 <mat-icon class="controlIcon" svgIcon="cloud-download"></mat-icon>
                 <span class="controlText">Download</span>
@@ -43,16 +41,17 @@
         </div>
     </div>
 
+    <!-- Video List -->
     <div class="contentBox">
         <div class="videoListItem"
-            *ngFor="let video of appState?.videoList; let i = index; let even = even; let odd = odd; trackBy: trackByFn"
+            *ngFor="let video of videoList; let i = index; let even = even; let odd = odd; trackBy: trackByFn"
             [ngClass]="{ odd: odd, even: even }">
 
-            <mat-checkbox class="videoSelected" [(ngModel)]="video.selected"
-                *ngIf="appState?.videoList?.length > 1"
-                (click)="$event.stopPropagation()"
-                (change)="$event ? selection.toggle(video) : null"
-                [checked]="selection.isSelected(video)"
+            <mat-checkbox class="videoSelected"
+                *ngIf="videoList.length > 1"
+                [(ngModel)]="video.selected"
+                (change)="onSelect(video)"
+                [checked]="video.selected"
                 [color]="'primary'">
             </mat-checkbox>
 

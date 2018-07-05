@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AppStateService } from 'core/services/app-state.service';
-import { YoutubeVideo } from 'shared/models/youtube-video';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
-import { SelectionModel } from '@angular/cdk/collections';
-import { AppState } from 'shared/models/app-state';
+
 import { ElectronService } from 'ngx-electron';
+import { AppStateService } from 'core/services/app-state.service';
+import { VideoListService } from 'core/services/video-list.service';
+import { AppState, YoutubeVideo, AppList } from 'shared/models';
 
 @Component({
     selector: 'app-content',
@@ -13,42 +13,42 @@ import { ElectronService } from 'ngx-electron';
 })
 export class ContentComponent implements OnInit {
 
-    selection = new SelectionModel<YoutubeVideo>(true, []);
     appState: AppState;
+    videoList: YoutubeVideo[];
+
+    selectedCount: number;
+    allSelected: boolean;
+    interSelected: boolean;
 
     constructor(
-
     private electronSrv: ElectronService,
-    private appStateSrv: AppStateService) {
+    private appStateSrv: AppStateService,
+    private videoListSrv: VideoListService) {
+
+        this.selectedCount = 0;
+        this.allSelected   = false;
+        this.interSelected = false;
+
+        this.videoListSrv.videoList$.subscribe((data) => {
+            this.videoList = data;
+        });
+
         this.appStateSrv.appState$.subscribe((data) => {
             this.appState = data;
-            if (this.appState.videoList && this.appState.videoList.length === 1) {
-                this.appState.videoList[0].selected = true;
-            }
         });
     }
 
     ngOnInit() {
-
         this.electronSrv.ipcRenderer.on('downloadProgress', (event, data) => {
                 console.log('downloadProgress', data.index);
         });
     }
 
-    isAllSelected() {
-        return this.appState.videoList.length === this.selection.selected.length;
-    }
-
-    masterToggle() {
-        this.isAllSelected()
-            ? this.selection.clear()
-            : _.forEach(this.appState.videoList, (video) => this.selection.select(video));
-    }
-
     download() {
-        // const selected = this.appState.videoList[0];
-        const selected = this.selection.selected;
-        console.log('Selected video', selected);
+        /*
+        // const selected = this.videoList[0];
+        const selected = this.appList.selection.selected;
+        console.log('Selected video', selected, this.videoList);
 
         // https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2
         _.forEach(selected, (video) => {
@@ -59,11 +59,45 @@ export class ContentComponent implements OnInit {
             };
             this.electronSrv.ipcRenderer.send('onDownload', data);
         });
-
-
+        */
     }
 
     trackByFn(index, item) {
         return item.index;
+    }
+
+
+    onSelect() {
+        this.updateSelection();
+    }
+
+    onSelectAll() {
+        this.allSelected = !this.allSelected;
+        _.forEach(this.videoList, (video) => {
+            video.selected = this.allSelected;
+        });
+        this.updateSelection();
+    }
+
+    updateSelection() {
+        this.selectedCount = 0;
+        _.forEach(this.videoList, (video) => {
+            if (video.selected) {
+                this.selectedCount++;
+            }
+        });
+
+        if (this.selectedCount === this.videoList.length) {
+            this.allSelected = true;
+            this.interSelected = false;
+
+        } else if (this.selectedCount > 0 && this.selectedCount < this.videoList.length) {
+            this.interSelected = true;
+        } else if (this.selectedCount === 0) {
+            this.allSelected = false;
+            this.interSelected = false;
+        }
+
+        this.videoListSrv.setVideoList(this.videoList);
     }
 }

@@ -6,12 +6,11 @@ import { AppState } from 'shared/models/app-state';
 @Injectable()
 export class AppStateService {
 
-    // App state
     appStateDefault = {
         loader: false,
         notFound: false,
         macOsTitleBar: false,
-        inputValue: '',
+        inputValue: 'https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2',
         selectedTab: 0,
         videoList: []
     };
@@ -20,30 +19,36 @@ export class AppStateService {
 
     constructor() { }
 
-    // App state
     setAppState(data) {
         this.appState.next(_.cloneDeep(data));
     }
+
     setAppStateByKey(key, value) {
         const appState = this.appState.getValue();
         appState[key] = value;
         this.setAppState(appState);
     }
+
     setloader(data) {
         this.setAppStateByKey('loader', data);
     }
+
     setNotFound(data) {
         this.setAppStateByKey('notFound', data);
     }
+
     setMacOsTitleBar(data) {
         this.setAppStateByKey('macOsTitleBar', data);
     }
+
     setInputValue(data) {
         this.setAppStateByKey('inputValue', data);
     }
+
     setSelectedTab(data) {
         this.setAppStateByKey('selectedTab', data);
     }
+
     setVideoList(data) {
         this.setAppStateByKey('videoList', data);
     }

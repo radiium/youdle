@@ -5,7 +5,6 @@ import ytdl = require('ytdl-core');
 import ffmpeg = require('fluent-ffmpeg');
 import ffmpegStatic = require('ffmpeg-static');
 import fs = require('fs-extra');
-import url = require('url');
 import path = require('path');
 
 import { handleError } from './error';
@@ -17,27 +16,25 @@ console.log('temp', app.getPath('temp'));
 // ----------------------------------------------------------------------------
 // Download management
 
+export function initDownloadEvent() {
+    ipcMain.on('onDownload', (event, arg) => {
+        console.log('==> onDownload =======================');
+        console.log('params', arg);
+
+        const index = arg.index;
+        const videoId = arg.videoId;
+        const filePath = arg.filePath;
+        const fileName = arg.fileName;
+
+        if (!checkDownloadParam(index, videoId, filePath, fileName, event)) {
+            return;
+        }
+
+        download(event, index, videoId, fileName);
+    });
+}
 
 
-ipcMain.on('onDownload', (event, arg) => {
-    console.log('==> onDownload =======================');
-    console.log('params', arg);
-
-    const index = arg.index;
-    const videoId = arg.videoId;
-    const filePath = arg.filePath;
-    const fileName = arg.fileName;
-
-    if (!checkDownloadParam(index, videoId, filePath, fileName, event)) {
-        return;
-    }
-
-    download(event, index, videoId, fileName);
-
-    // event.sender.send('downloadProgress');
-    // event.sender.send('convertProgress');
-
-});
 
 function download(event, index, videoId, fileName) {
 

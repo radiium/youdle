@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { AppStateService } from 'core/services/app-state.service';
+import { VideoListService } from 'core/services/video-list.service';
 import { YoutubeService } from 'core/services/youtube.service';
 import { YoutubeVideo } from 'shared/models/youtube-video';
 import { ElectronService } from 'ngx-electron';
@@ -18,6 +19,7 @@ export class UtilsService {
     constructor(
     private electronSrv: ElectronService,
     private appStateSrv: AppStateService,
+    private videoListSrv: VideoListService,
     private ytSrv: YoutubeService) {
         this.appStateSrv.appState$.subscribe((data) => {
             this.appState = data;
@@ -90,11 +92,12 @@ export class UtilsService {
         }
     }
 
-    updateContent(data, value) {
-        this.appStateSrv.setVideoList(data);
+    updateContent(videoList, value) {
+        videoList[0].selected = videoList.length === 1 ? true : false;
+        this.videoListSrv.setVideoList(videoList);
         this.appStateSrv.setloader(false);
 
-        const notFound = ((data && data.length === 0) && (value && value.length > 0));
+        const notFound = ((videoList && videoList.length === 0) && (value && value.length > 0));
         this.appStateSrv.setNotFound(notFound);
     }
 

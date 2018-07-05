@@ -10,8 +10,8 @@ console.log(`Electron launching with NODE_ENV: ${process.env.NODE_ENV}`);
 import { app, BrowserWindow, ipcMain, Menu, dialog, clipboard } from 'electron';
 import contextMenu = require('electron-context-menu');
 import { initStorage } from './scripts/storage';
+import { initDownloadEvent } from './scripts/download';
 
-import fs = require('fs-extra');
 import url = require('url');
 import path = require('path');
 
@@ -34,16 +34,15 @@ if (isDev) {
     });
 }
 
-
 // Create main window
 const createMainWindow = async () => {
 
     // Initialize main window
     mainWindow = new BrowserWindow({
         width: 500,
-        height: 125,
+        height: 325,
         minWidth: 500,
-        minHeight: 125,
+        minHeight: 174, // 125,
         // transparent: true,
         // frame: false,
         // titleBarStyle: 'hiddenInset', // 'customButtonsOnHover',
@@ -130,21 +129,8 @@ app.on('browser-window-focus', (event, focusedWindow) => {
     event.sender.send('sendClipboardValue', clipboard.readText());
 });
 
-
-
 initStorage();
-
-
-
-
-// ----------------------------------------------------------------------------
-// Settings
-
-
-
-
-
-
+initDownloadEvent();
 
 
 export function errorHandler(error) {
