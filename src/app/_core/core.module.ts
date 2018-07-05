@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { DataService } from 'core/services/data.service';
+import { SettingsService } from 'core/services/settings.service';
+import { AppStateService } from 'core/services/app-state.service';
 import { YoutubeService } from 'core/services/youtube.service';
 import { UtilsService } from 'core/services/utils.service';
 
@@ -8,7 +9,8 @@ import { UtilsService } from 'core/services/utils.service';
     exports: [],
     declarations: [],
     providers: [
-        DataService,
+        SettingsService,
+        AppStateService,
         YoutubeService,
         UtilsService
     ]

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { DataService } from 'core/services/data.service';
+import { AppStateService } from 'core/services/app-state.service';
 import { YoutubeService } from 'core/services/youtube.service';
 import { YoutubeVideo } from 'shared/models/youtube-video';
 import { ElectronService } from 'ngx-electron';
@@ -17,9 +17,9 @@ export class UtilsService {
 
     constructor(
     private electronSrv: ElectronService,
-    private dataSrv: DataService,
+    private appStateSrv: AppStateService,
     private ytSrv: YoutubeService) {
-        this.dataSrv.appState$.subscribe((data) => {
+        this.appStateSrv.appState$.subscribe((data) => {
             this.appState = data;
             // this.updateHeight();
         });
@@ -39,14 +39,14 @@ export class UtilsService {
         this.electronSrv.ipcRenderer.send('getOsType');
         this.electronSrv.ipcRenderer.on('getOsTypeResp', (event, osType) => {
             if (osType === 'darwin') {
-                this.dataSrv.setMacOsTitleBar(true);
+                this.appStateSrv.setMacOsTitleBar(true);
             }
         });
     }
 
     parseInputValue(value) {
 
-        this.dataSrv.setloader(true);
+        this.appStateSrv.setloader(true);
 
         let videoList = [];
         let resource = this.extractID(value);
@@ -91,11 +91,11 @@ export class UtilsService {
     }
 
     updateContent(data, value) {
-        this.dataSrv.setVideoList(data);
-        this.dataSrv.setloader(false);
+        this.appStateSrv.setVideoList(data);
+        this.appStateSrv.setloader(false);
 
         const notFound = ((data && data.length === 0) && (value && value.length > 0));
-        this.dataSrv.setNotFound(notFound);
+        this.appStateSrv.setNotFound(notFound);
     }
 
     updateHeight() {

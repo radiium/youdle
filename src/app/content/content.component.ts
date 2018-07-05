@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from 'core/services/data.service';
+import { AppStateService } from 'core/services/app-state.service';
 import { YoutubeVideo } from 'shared/models/youtube-video';
 import * as _ from 'lodash';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AppState } from 'shared/models/app-state';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     selector: 'app-content',
@@ -16,8 +17,10 @@ export class ContentComponent implements OnInit {
     appState: AppState;
 
     constructor(
-    private dataSrv: DataService) {
-        this.dataSrv.appState$.subscribe((data) => {
+
+    private electronSrv: ElectronService,
+    private appStateSrv: AppStateService) {
+        this.appStateSrv.appState$.subscribe((data) => {
             this.appState = data;
             if (this.appState.videoList && this.appState.videoList.length === 1) {
                 this.appState.videoList[0].selected = true;
@@ -26,6 +29,10 @@ export class ContentComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.electronSrv.ipcRenderer.on('downloadProgress', (event, data) => {
+                console.log('downloadProgress', data.index);
+        });
     }
 
     isAllSelected() {
@@ -39,8 +46,21 @@ export class ContentComponent implements OnInit {
     }
 
     download() {
+        // const selected = this.appState.videoList[0];
         const selected = this.selection.selected;
-        console.log('download', selected);
+        console.log('Selected video', selected);
+
+        // https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2
+        _.forEach(selected, (video) => {
+            const data = {
+                videoId: video.id,
+                filePath: '/Users/amigamac/Desktop',
+                fileName: video.title
+            };
+            this.electronSrv.ipcRenderer.send('onDownload', data);
+        });
+
+
     }
 
     trackByFn(index, item) {

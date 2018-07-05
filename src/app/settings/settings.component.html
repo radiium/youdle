@@ -8,8 +8,8 @@
 
     <div class="settingsRow">
         <div class="rowLabel">Save file(s) in: </div>
-        <div class="content rowText" (click)="editDLPath()">
-            <div class="rowText">{{ filePath }}</div>
+        <div class="content rowText" (click)="editSavePath()">
+            <div class="rowText">{{ settings?.savePath }}</div>
             <button class="rowBtn">
                 <mat-icon svgIcon="pencil"></mat-icon>
             </button>

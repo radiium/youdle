@@ -7,26 +7,17 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxElectronModule } from 'ngx-electron';
 import { MatIconRegistry, MatIconModule } from '@angular/material';
+
 import { CustomMaterialModule } from './modules/material/custom-material.module';
 
-
-
-import { HeaderComponent } from './components/header/header.component';
-
-
-import { ContentComponent } from './components/content/content.component';
 import { LoaderComponent } from './components/loader/loader.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { DurationPipe } from './pipes/duration.pipe';
 
 @NgModule({
     entryComponents: [
     ],
     declarations: [
-        HeaderComponent,
-        ContentComponent,
         LoaderComponent,
-        SettingsComponent,
         DurationPipe
     ],
     imports: [
@@ -50,10 +41,7 @@ import { DurationPipe } from './pipes/duration.pipe';
         NgxElectronModule,
         MatIconModule,
         CustomMaterialModule,
-        HeaderComponent,
-        ContentComponent,
         LoaderComponent,
-        SettingsComponent,
         DurationPipe
     ],
     providers: [],

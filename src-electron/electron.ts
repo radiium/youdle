@@ -9,36 +9,16 @@ console.log(`Electron launching with NODE_ENV: ${process.env.NODE_ENV}`);
 // Import dependencies
 import { app, BrowserWindow, ipcMain, Menu, dialog, clipboard } from 'electron';
 import contextMenu = require('electron-context-menu');
-import storage = require('electron-json-storage');
+import { initStorage } from './scripts/storage';
 
 import fs = require('fs-extra');
 import url = require('url');
 import path = require('path');
-import ytdl = require('ytdl-core');
-import ffmpeg = require('fluent-ffmpeg');
+
 
 import { devMenuTemplate } from './menu/dev_menu.template';
 import { fileMenuTemplate } from './menu/file_menu.template';
 import { editMenuTemplate } from './menu/edit_menu.template';
-import { openSettings } from './settings/settings';
-
-
-
-// ffmpeg Binary
-
-// method 1
-import ffmpegStatic = require('ffmpeg-static');
-console.log(ffmpegStatic.path);
-// https://stackoverflow.com/questions/38361996/how-can-i-bundle-a-precompiled-binary-with-electron/43389268#43389268
-//  to find the ffmpeg binary for the platform you are running
-// in any scenario (whether or not the app is bundled or you are in development)
-// require('ffmpeg-static').path.replace('app.asar', 'app.asar.unpacked')
-
-// method 2
-const bin = require('ffmpeg-binaries').ffmpegPath();
-
-
-
 
 
 // Init variable
@@ -145,54 +125,14 @@ app.on('before-quit', () => {
 });
 
 app.on('browser-window-focus', (event, focusedWindow) => {
-
-    console.log('browser-window-focus');
-    console.log('clipboard', clipboard.readText());
+    // console.log('browser-window-focus');
+    // console.log('clipboard', clipboard.readText());
     event.sender.send('sendClipboardValue', clipboard.readText());
 });
 
 
-// ----------------------------------------------------------------------------
-// App state management
-const appStateDataName = 'app-state';
-const saveAppState = 'saveAppState';
-const getAppState = 'getAppState';
-const getAppStateResp = 'getAppStateResp';
 
-
-ipcMain.on(saveAppState, (event, data) => {
-    storage.set(appStateDataName, data, (error) => {
-        handleError(error, event.sender, data);
-    });
-});
-
-
-ipcMain.on(getAppState, (event, arg) => {
-    storage.get(appStateDataName, (error, data) => {
-        handleError(error, event.sender, data);
-        event.sender.send(getAppStateResp, data);
-    });
-});
-
-
-
-
-// ----------------------------------------------------------------------------
-// Get os type management
-ipcMain.on('openSettings', (event, data) => {
-    openSettings();
-});
-
-
-// ----------------------------------------------------------------------------
-// Download management
-
-ipcMain.on('onDownload', (event, arg) => {
-    console.log('=========================');
-    console.log('onDownload');
-    event.sender.send('parseUrlResp');
-
-});
+initStorage();
 
 
 
@@ -200,56 +140,14 @@ ipcMain.on('onDownload', (event, arg) => {
 // ----------------------------------------------------------------------------
 // Settings
 
-// Resolve file path
-ipcMain.on('send-get-save-path', (event, arg) => {
-
-    const edit     = arg.edit;
-    const filePath = arg.filePath;
-    const defaultPath = app.getPath('downloads') || '';
-
-    const choosenPath = filePath ? filePath : defaultPath;
-
-    if (edit) {
-        dialog.showOpenDialog({
-            title: 'Select folder',
-            defaultPath: choosenPath,
-            filters: [ {name: 'All Files', extensions: ['.mp3']} ],
-            properties: ['openDirectory', 'createDirectory']
-        },
-        (selFilePath) => {
-            let selPath = selFilePath[0];
-            if (!selPath) {
-                selPath = defaultPath;
-            }
-            event.sender.send('get-save-path', selPath);
-        });
-    } else {
-        event.sender.send('get-save-path', choosenPath);
-    }
-});
 
 
-// ----------------------------------------------------------------------------
-// Get os type management
-ipcMain.on('getOsType', (event, data) => {
-    event.sender.send('getOsTypeResp', process.platform);
-});
 
 
-// ----------------------------------------------------------------------------
-// Errors handlers
-const handleError = (error, sender, data?) => {
-    if (error) {
-        const errorResp = {
-            error: error,
-            customData: data
-        };
-        sender.send('onElectronError', errorResp);
-        throw error;
-    }
-};
 
-const errorHandler = function(error) {
+
+
+export function errorHandler(error) {
     const msg: any = {
         type : 'error',
         title : 'Uncaught Exception',
@@ -269,6 +167,5 @@ const errorHandler = function(error) {
 
     msg.detail = 'Please check the console log for more details.';
     mainWindow.send('onElectronError', msg);
-};
-
+}
 process.on('uncaughtException', errorHandler);

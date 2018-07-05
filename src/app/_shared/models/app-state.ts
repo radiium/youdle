@@ -6,5 +6,6 @@ export interface AppState {
     macOsTitleBar: boolean;
     inputValue: string;
     selectedTab: number;
+    // downloadStarted: boolean;
     videoList: YoutubeVideo[];
 }

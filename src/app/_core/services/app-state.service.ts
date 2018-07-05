@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { AppState } from 'shared/models/app-state';
 
 @Injectable()
-export class DataService {
+export class AppStateService {
 
     // App state
     appStateDefault = {
@@ -20,36 +20,30 @@ export class DataService {
 
     constructor() { }
 
+    // App state
     setAppState(data) {
         this.appState.next(_.cloneDeep(data));
     }
-
     setAppStateByKey(key, value) {
         const appState = this.appState.getValue();
         appState[key] = value;
         this.setAppState(appState);
     }
-
     setloader(data) {
         this.setAppStateByKey('loader', data);
     }
-
     setNotFound(data) {
         this.setAppStateByKey('notFound', data);
     }
-
     setMacOsTitleBar(data) {
         this.setAppStateByKey('macOsTitleBar', data);
     }
-
     setInputValue(data) {
         this.setAppStateByKey('inputValue', data);
     }
-
     setSelectedTab(data) {
         this.setAppStateByKey('selectedTab', data);
     }
-
     setVideoList(data) {
         this.setAppStateByKey('videoList', data);
     }
