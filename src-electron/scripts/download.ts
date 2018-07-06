@@ -19,12 +19,16 @@ console.log('temp', app.getPath('temp'));
 export function initDownloadEvent() {
     ipcMain.on('onDownload', (event, arg) => {
         console.log('==> onDownload =======================');
-        console.log('params', arg);
 
         const index = arg.index;
         const videoId = arg.videoId;
         const filePath = arg.filePath;
         const fileName = arg.fileName;
+
+        console.log('index', index);
+        console.log('videoId', videoId);
+        console.log('filePath', filePath);
+        console.log('fileName', fileName);
 
         if (!checkDownloadParam(index, videoId, filePath, fileName, event)) {
             return;

@@ -1,0 +1,47 @@
+<div class="videoListItemWrapper">
+
+  <!--
+    *ngIf="videoList.length > 1"
+
+  -->
+
+      <div class="videoListItem">
+
+          <mat-checkbox class="videoSelected"
+              *ngIf="!video.progress.finish"
+              (change)="onVideoChange()"
+              [(ngModel)]="video.selected"
+              [checked]="video.selected"
+              [disabled]="video.progress.finish || disableSelection"
+              [color]="'primary'">
+          </mat-checkbox>
+
+          <mat-checkbox class="videoSelected"
+              *ngIf="video.progress.finish"
+              [(ngModel)]="video.progress.finish"
+              [checked]="video.progress.finish"
+              [disabled]="video.progress.finish || disableSelection"
+              [color]="'primary'">
+          </mat-checkbox>
+
+          <div class="videoThumb">
+              <img [src]="video.thumb" alt="">
+          </div>
+
+          <div class="videoInfos">
+              <span class="videoDuration">{{ video.duration | duration }}</span>
+              <span class="videoTitle"> - {{ video.title }}</span>
+          </div>
+      </div>
+
+      <div class="videoListItemBackground"
+          [class.finished]="video.progress.finish"
+          [ngClass]="oddEvenClass"></div>
+
+      <div class="downloadProgress" *ngIf="!video.progress.finish"
+          [style.width]="video.progress.download?.percent + '%'"></div>
+
+      <div class="convertProgress" *ngIf="!video.progress.finish"
+          [style.width]="video.progress.convert?.percent + '%'"></div>
+
+  </div>

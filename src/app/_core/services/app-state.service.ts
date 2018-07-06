@@ -10,7 +10,7 @@ export class AppStateService {
         loader: false,
         notFound: false,
         macOsTitleBar: false,
-        inputValue: 'https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2',
+        inputValue: '',
         selectedTab: 0,
         videoList: []
     };

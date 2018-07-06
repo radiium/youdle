@@ -22,7 +22,6 @@ export class SettingsComponent implements OnInit {
     ngOnInit() {
         this.settingsSrv.settings$.subscribe((data) => {
             this.settings = data;
-            console.log('SettingsComponent change =>>', data);
             this.cdr.detectChanges();
         });
     }

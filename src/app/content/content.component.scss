@@ -78,68 +78,94 @@
     .contentBox {
         overflow: auto;
 
-        .videoListItem {
+
+        /*
+        .videoListItemWrapper {
+            position: relative;
             width: 100%;
-            // height: 50px;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            padding: 5px 0 5px 0;
-            font-size: 0.9rem;
+            height: 50px;
 
-            &.even {
-                background-color: rgba(0, 0, 0, 0.2);
-            }
-            &.odd {
-                // background-color: rgba(0, 0, 0, 0.3);
-            }
-
-            .videoSelected {
-                align-self: center;
-                margin-left: 20px;
-            }
-
-            .videoThumb {
-                align-self: center;
+            .downloadProgress {
+                position: absolute;
+                z-index: 1;
+                background-color: rgba(74, 0, 247, 0.25);
                 height: 50px;
-                width: 50px;
-                display: flex;
-                flex-direction: column;
-                margin-right: 20px;
-                margin-left: 20px;
+                // width: 40%;
+                top: 0;
+            }
 
-                img {
-                    object-fit: cover;
-                    height: 50px;
-                    border-radius: 50%;
+            .videoListItemBackground {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+
+                &.even {
+                    background-color: rgba(0, 0, 0, 0.2);
+                }
+                &.odd {
+                    // background-color: rgba(0, 0, 0, 0.3);
                 }
             }
 
-            .videoInfos {
-                overflow: hidden;
-                padding: 3px 0 3px 0;
-                // line-height: 1.4rem;
+            .videoListItem {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                padding: 5px 0 5px 0;
+                font-size: 0.9rem;
+                z-index: 2;
 
-                .videoDuration {
-                    border: 1px solid white;
-                    padding: 0 5px 0 5px;
-                    font-size: 0.7rem;
+                .videoSelected {
+                    align-self: center;
+                    margin-left: 20px;
                 }
 
-                .videoTitle {
-                }
-
-                .videoSubInfos {
+                .videoThumb {
+                    align-self: center;
+                    height: 50px;
+                    width: 50px;
                     display: flex;
-                    flex-direction: row;
-                    flex-wrap: nowrap;
-                    font-size: 0.8rem;
+                    flex-direction: column;
+                    margin-right: 20px;
+                    margin-left: 20px;
 
-                    .videoDuration {}
-                    .videoDate {}
+                    img {
+                        object-fit: cover;
+                        height: 50px;
+                        border-radius: 50%;
+                    }
+                }
+
+                .videoInfos {
+                    overflow: hidden;
+                    padding: 3px 0 3px 0;
+                    // line-height: 1.4rem;
+
+                    .videoDuration {
+                        border: 1px solid white;
+                        padding: 0 5px 0 5px;
+                        font-size: 0.7rem;
+                    }
+
+                    .videoTitle {
+                    }
+
+                    .videoSubInfos {
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        font-size: 0.8rem;
+
+                        .videoDuration {}
+                        .videoDate {}
+                    }
                 }
             }
         }
+        */
     }
 }
 

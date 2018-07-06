@@ -9,7 +9,7 @@ import { NgxElectronModule } from 'ngx-electron';
 import { MatIconRegistry, MatIconModule } from '@angular/material';
 
 import { CustomMaterialModule } from './modules/material/custom-material.module';
-
+import { VideoListItemComponent } from './components/video-list-item/video-list-item.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { DurationPipe } from './pipes/duration.pipe';
 
@@ -17,6 +17,7 @@ import { DurationPipe } from './pipes/duration.pipe';
     entryComponents: [
     ],
     declarations: [
+        VideoListItemComponent,
         LoaderComponent,
         DurationPipe
     ],
@@ -41,6 +42,7 @@ import { DurationPipe } from './pipes/duration.pipe';
         NgxElectronModule,
         MatIconModule,
         CustomMaterialModule,
+        VideoListItemComponent,
         LoaderComponent,
         DurationPipe
     ],

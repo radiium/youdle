@@ -1,0 +1,91 @@
+.videoListItemWrapper {
+    position: relative;
+    width: 100%;
+    height: 60px;
+
+    .downloadProgress {
+        position: absolute;
+        z-index: 1;
+        background-color: rgba(74, 0, 247, 0.25);
+        height: 60px;
+        // width: 40%;
+        top: 0;
+    }
+
+    .videoListItemBackground {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+
+        &.even {
+            background-color: rgba(0, 0, 0, 0.2);
+            &.finished {
+                background-color: gray;
+            }
+        }
+        &.odd {
+            // background-color: rgba(0, 0, 0, 0.3);
+            &.finished {
+                background-color: lightgray;
+            }
+        }
+    }
+
+    .videoListItem {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 5px 0 5px 0;
+        font-size: 0.9rem;
+        z-index: 2;
+
+        .videoSelected {
+            align-self: center;
+            margin-left: 20px;
+        }
+
+        .videoThumb {
+            align-self: center;
+            height: 50px;
+            width: 50px;
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+            margin-left: 20px;
+
+            img {
+                object-fit: cover;
+                height: 50px;
+                border-radius: 50%;
+            }
+        }
+
+        .videoInfos {
+            overflow: hidden;
+            padding: 3px 0 3px 0;
+            // line-height: 1.4rem;
+
+            .videoDuration {
+                border: 1px solid white;
+                padding: 0 5px 0 5px;
+                font-size: 0.7rem;
+            }
+
+            .videoTitle {
+            }
+
+            .videoSubInfos {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                font-size: 0.8rem;
+
+                .videoDuration {}
+                .videoDate {}
+            }
+        }
+    }
+}

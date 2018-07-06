@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { AppStateService } from 'core/services/app-state.service';
 import { VideoListService } from 'core/services/video-list.service';
 import { YoutubeService } from 'core/services/youtube.service';
-import { YoutubeVideo } from 'shared/models/youtube-video';
+import { YoutubeVideo, Progress, ProgressType, ProgressStatus } from 'shared/models/youtube-video';
 import { ElectronService } from 'ngx-electron';
 import { AppState } from 'shared/models/app-state';
 
@@ -25,6 +25,8 @@ export class UtilsService {
             this.appState = data;
             // this.updateHeight();
         });
+
+        this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
 
         /*
         this.electronSrv.ipcRenderer.on('sendClipboardValue', (event, clipboardValue) => {
@@ -164,7 +166,18 @@ export class UtilsService {
             thumb: data.snippet.thumbnails.default.url,
             duration: moment.duration(data.contentDetails.duration).asMilliseconds(),
             publishedAt: data.snippet.publishedAt,
-            selected: false
+            selected: false,
+            progress: this.getEmptyProgress()
+        };
+    }
+
+    getEmptyProgress(): Progress {
+        return {
+            finish: false,
+            type: ProgressType.NONE,
+            status: ProgressStatus.NONE,
+            download: null,
+            convert: null
         };
     }
 }

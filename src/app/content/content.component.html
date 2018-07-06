@@ -17,6 +17,7 @@
                 (change)="onSelectAll($event)"
                 [checked]="allSelected"
                 [indeterminate]="interSelected"
+                [disabled]="(finishedCount === videoList.length) || downloadStarted"
                 [color]="'primary'">
             </mat-checkbox>
 
@@ -29,40 +30,37 @@
 
             <div class="flexSpacer" *ngIf="videoList.length > 0"></div>
 
-            <button class="control" mat-button
-                *ngIf="videoList.length > 0"
+            <button class="control"
+                mat-button
+                *ngIf="(videoList.length > 0) && !downloadStarted"
                 [class.anim]="selectedCount > 0"
                 [disabled]="selectedCount === 0"
                 [class.controlDisabled]="selectedCount === 0"
-                (click)="download()">
+                (click)="startDownload()">
                 <mat-icon class="controlIcon" svgIcon="cloud-download"></mat-icon>
                 <span class="controlText">Download</span>
+            </button>
+
+            <button class="control"
+                mat-button
+                *ngIf="downloadStarted"
+                [class.anim]="selectedCount > 0"
+                [class.controlDisabled]="selectedCount === 0"
+                (click)="cancelDownload()">
+                <mat-icon class="controlIcon" svgIcon="close-octagon-outline"></mat-icon>
+                <span class="controlText">Cancel</span>
             </button>
         </div>
     </div>
 
     <!-- Video List -->
     <div class="contentBox">
-        <div class="videoListItem"
+        <app-video-list-item
             *ngFor="let video of videoList; let i = index; let even = even; let odd = odd; trackBy: trackByFn"
-            [ngClass]="{ odd: odd, even: even }">
-
-            <mat-checkbox class="videoSelected"
-                *ngIf="videoList.length > 1"
-                [(ngModel)]="video.selected"
-                (change)="onSelect(video)"
-                [checked]="video.selected"
-                [color]="'primary'">
-            </mat-checkbox>
-
-            <div class="videoThumb">
-                <img [src]="video.thumb" alt="">
-            </div>
-
-            <div class="videoInfos">
-                <span class="videoDuration">{{ video.duration | duration }}</span>
-                <span class="videoTitle"> - {{ video.title }}</span>
-            </div>
-        </div>
+            [video]="video"
+            (videoChange)="updateSelection()"
+            [disableSelection]="downloadStarted"
+            [oddEvenClass]="odd ? 'odd': 'even'">
+        </app-video-list-item>
     </div>
 </div>
