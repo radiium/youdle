@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { AppStateService } from 'core/services/app-state.service';
-import { VideoListService } from 'core/services/video-list.service';
+import { DataService } from 'core/services/data.service';
 import { YoutubeService } from 'core/services/youtube.service';
-import { YoutubeVideo, Progress, ProgressType, ProgressStatus } from 'shared/models/youtube-video';
+import { YoutubeVideo, ProgressStatus } from 'shared/models/youtube-video';
 import { ElectronService } from 'ngx-electron';
 import { AppState } from 'shared/models/app-state';
 
@@ -15,15 +14,19 @@ import { AppState } from 'shared/models/app-state';
 export class UtilsService {
 
     appState: AppState;
+    videoList: YoutubeVideo[];
 
     constructor(
     private electronSrv: ElectronService,
-    private appStateSrv: AppStateService,
-    private videoListSrv: VideoListService,
+    private datateSrv: DataService,
     private ytSrv: YoutubeService) {
-        this.appStateSrv.appState$.subscribe((data) => {
+        this.datateSrv.appState$.subscribe((data) => {
             this.appState = data;
             // this.updateHeight();
+        });
+
+        this.datateSrv.videoList$.subscribe((data) => {
+            this.videoList = data;
         });
 
         this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
@@ -39,18 +42,9 @@ export class UtilsService {
 
     }
 
-    loadOsType() {
-        this.electronSrv.ipcRenderer.send('getOsType');
-        this.electronSrv.ipcRenderer.on('getOsTypeResp', (event, osType) => {
-            if (osType === 'darwin') {
-                this.appStateSrv.setMacOsTitleBar(true);
-            }
-        });
-    }
-
     parseInputValue(value) {
 
-        this.appStateSrv.setloader(true);
+        this.datateSrv.setloader(true);
 
         let videoList = [];
         let resource = this.extractID(value);
@@ -68,7 +62,7 @@ export class UtilsService {
                 (data: any) => {
                     console.log('getVideosById');
                     if (data && data.items[0]) {
-                        videoList.push(this.parseVideo(data.items[0], 0));
+                        videoList.push(this.parseVideo(data.items[0], true));
                     }
                     this.updateContent(videoList, value);
                 },
@@ -79,9 +73,8 @@ export class UtilsService {
                 (data: any) => {
                     console.log('getPlaylists');
                     if (data && data.length > 0) {
-                        let count = -1;
                         videoList = _.map(data, (video) => {
-                            return this.parseVideo(video, ++count);
+                            return this.parseVideo(video, false);
                         });
                     }
                     this.updateContent(videoList, value);
@@ -95,22 +88,24 @@ export class UtilsService {
     }
 
     updateContent(videoList, value) {
-        videoList[0].selected = videoList.length === 1 ? true : false;
-        this.videoListSrv.setVideoList(videoList);
-        this.appStateSrv.setloader(false);
+        if (videoList.length === 1) {
+            videoList[0].selected = true;
+        }
+        this.datateSrv.setVideoList(videoList);
+        this.datateSrv.setloader(false);
 
         const notFound = ((videoList && videoList.length === 0) && (value && value.length > 0));
-        this.appStateSrv.setNotFound(notFound);
+        this.datateSrv.setNotFound(notFound);
     }
 
     updateHeight() {
         let height;
         if (this.appState.selectedTab === 0) {
-            if (this.appState.videoList.length === 0) {
+            if (this.videoList.length === 0) {
                 height = 100;
-            } else if (this.appState.videoList.length === 1) {
+            } else if (this.videoList.length === 1) {
                 height = 160;
-            } else if (this.appState.videoList.length > 1) {
+            } else if (this.videoList.length > 1) {
                 height = 370;
             }
         } else if (this.appState.selectedTab === 1) {
@@ -126,10 +121,6 @@ export class UtilsService {
 
         const currentWidth = win.getSize()[0];
         const currentHeight = win.getSize()[1];
-
-        if (this.appState.macOsTitleBar) {
-            height += 25;
-        }
 
         if (currentHeight < screenHeight) {
             win.setSize(currentWidth, height);
@@ -158,26 +149,16 @@ export class UtilsService {
         }
     }
 
-    parseVideo(data, index): YoutubeVideo {
+    parseVideo(data, preSelect): YoutubeVideo {
         return {
-            index: index,
             id: data.id,
             title: _.deburr(data.snippet.localized.title),
             thumb: data.snippet.thumbnails.default.url,
             duration: moment.duration(data.contentDetails.duration).asMilliseconds(),
             publishedAt: data.snippet.publishedAt,
-            selected: false,
-            progress: this.getEmptyProgress()
-        };
-    }
-
-    getEmptyProgress(): Progress {
-        return {
-            finish: false,
-            type: ProgressType.NONE,
+            selected: preSelect,
             status: ProgressStatus.NONE,
-            download: null,
-            convert: null
+            progress: null
         };
     }
 }

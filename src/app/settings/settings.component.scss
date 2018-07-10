@@ -1,11 +1,71 @@
 .settingsWrapper {
     display: flex;
     flex-direction: column;
+    padding: 10px;
 
+    .labelRow {
+
+    }
     .settingsRow {
         display: flex;
         // min-height: 50px;
-        margin: 0 5px 0 5px;
+
+
+        .settingsInput {
+            font-size: 1.2rem;
+            color: #E4E4E4;
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 4px 15px 3px 15px;//0 8px 0 8px;
+            max-width: 100%;
+            display: flex;
+            word-break: break-all;
+            align-self: center;
+
+            &.settingsInputConcDl {
+                width: 60px;
+                justify-content: center;
+            }
+
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+            }
+        }
+
+        .settingsBtn {
+            height: 35px;
+            width: 35px;
+            border-radius: 35px;
+            color: #E4E4E4;
+            margin: 0 5px 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            &:hover {
+                // border: 1px solid white;
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+    }
+
+    .settingsRow {
+        // display: flex;
+        // min-height: 50px;
+        // margin: 0 5px 0 5px;
+
+        .concurrentDownloadInput {
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+            }
+            padding: 0 8px 0 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #E4E4E4;
+
+        }
 
 
         .rowLabel {

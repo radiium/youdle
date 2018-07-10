@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { YoutubeVideo } from 'shared/models';
 
 @Component({
@@ -6,7 +6,7 @@ import { YoutubeVideo } from 'shared/models';
     templateUrl: './video-list-item.component.html',
     styleUrls: ['./video-list-item.component.scss']
 })
-export class VideoListItemComponent {
+export class VideoListItemComponent implements OnChanges {
 
     @Input() video: YoutubeVideo;
     @Output() videoChange = new EventEmitter();
@@ -15,6 +15,10 @@ export class VideoListItemComponent {
 
     constructor() {
         this.disableSelection = false;
+    }
+
+    ngOnChanges(changes) {
+        // console.log('ngOnChanges', changes);
     }
 
     onVideoChange() {

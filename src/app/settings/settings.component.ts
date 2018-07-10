@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Settings } from 'shared/models/settings';
-import { SettingsService } from 'core/services/settings.service';
+import { DataService } from 'core/services/data.service';
+import { Settings } from 'shared/models';
 
 @Component({
     selector: 'app-settings',
@@ -11,26 +11,37 @@ export class SettingsComponent implements OnInit {
 
     error: string;
     savePath: string;
-
     settings: Settings;
 
     constructor(
     private cdr: ChangeDetectorRef,
-    private settingsSrv: SettingsService) {
+    private dataSrv: DataService) {
     }
 
     ngOnInit() {
-        this.settingsSrv.settings$.subscribe((data) => {
+        this.dataSrv.settings$.subscribe((data) => {
             this.settings = data;
             this.cdr.detectChanges();
         });
     }
 
     editSavePath() {
-        this.settingsSrv.editSavePath();
+        this.dataSrv.editSavePath();
     }
 
-    editConcurretDownload() {
-        this.settingsSrv.editConcurretDownload();
+    increment() {
+        this.settings.concurrentDownload++;
+        if (this.settings.concurrentDownload >  10) {
+            this.settings.concurrentDownload = 10;
+        }
+        this.dataSrv.setStoreConcurrentDownload(this.settings.concurrentDownload);
+    }
+
+    decrement() {
+        this.settings.concurrentDownload--;
+        if (this.settings.concurrentDownload < 1) {
+            this.settings.concurrentDownload = 1;
+        }
+        this.dataSrv.setStoreConcurrentDownload(this.settings.concurrentDownload);
     }
 }

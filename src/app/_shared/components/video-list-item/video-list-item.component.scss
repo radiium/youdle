@@ -53,15 +53,37 @@
             width: 50px;
             display: flex;
             flex-direction: column;
-            margin-right: 20px;
-            margin-left: 20px;
+            padding-right: 30px;
+            padding-left: 30px;
+            box-sizing: content-box;
+            position: relative;
 
             img {
                 object-fit: cover;
                 height: 50px;
                 border-radius: 50%;
+
+                &.hidded {
+                    opacity: 0.3;
+                }
+            }
+
+            .progressDetail {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: -4px;
+                height: 100%;
+                text-align: center;
+
+                .detailTitle {
+                }
+                .detailNbr {
+                    font-size: 0.8rem;
+                }
             }
         }
+
 
         .videoInfos {
             overflow: hidden;

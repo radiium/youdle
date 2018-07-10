@@ -19,9 +19,10 @@
 
     <mat-toolbar-row class="rowHeader" *ngIf="appState?.selectedTab === 1">
         <div class="settingsHeader">Settings</div>
-        <button class="settingsBtn" *ngIf="appState?.selectedTab === 1" (click)="closeSettings()">
+        <button class="settingsBtn" (click)="closeSettings()">
             <mat-icon svgIcon="arrow-left-thick"></mat-icon>
         </button>
     </mat-toolbar-row>
+
 
 </mat-toolbar>

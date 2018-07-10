@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { AppStateService } from 'core/services/app-state.service';
+import { DataService } from 'core/services/data.service';
 import { AppState } from 'shared/models/app-state';
 
 @Component({
@@ -12,12 +12,12 @@ export class AppComponent implements OnInit {
     appState: AppState;
 
     constructor(
-    private AppStateSrv: AppStateService,
+    private datateSrv: DataService,
     private cdRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
-        this.AppStateSrv.appState$.subscribe((data) => {
+        this.datateSrv.appState$.subscribe((data) => {
             this.appState = data;
             this.cdRef.detectChanges();
         });

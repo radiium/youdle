@@ -42,7 +42,7 @@ const createMainWindow = async () => {
         width: 500,
         height: 325,
         minWidth: 500,
-        minHeight: 196, // 174, // 125,
+        minHeight: 300, // 196, // 174, // 125,
         // transparent: true,
         // frame: false,
         // titleBarStyle: 'hiddenInset', // 'customButtonsOnHover',

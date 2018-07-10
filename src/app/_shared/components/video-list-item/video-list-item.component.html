@@ -1,47 +1,59 @@
 <div class="videoListItemWrapper">
 
-  <!--
+    <!--
     *ngIf="videoList.length > 1"
+    -->
 
-  -->
+    <div class="videoListItem">
 
-      <div class="videoListItem">
+        <mat-checkbox class="videoSelected"
+            *ngIf="video.status === -1"
+            (change)="onVideoChange()"
+            [(ngModel)]="video.selected"
+            [checked]="video.selected"
+            [disabled]="video.status !== -1 || disableSelection"
+            [color]="'primary'">
+        </mat-checkbox>
 
-          <mat-checkbox class="videoSelected"
-              *ngIf="!video.progress.finish"
-              (change)="onVideoChange()"
-              [(ngModel)]="video.selected"
-              [checked]="video.selected"
-              [disabled]="video.progress.finish || disableSelection"
-              [color]="'primary'">
-          </mat-checkbox>
+        <mat-checkbox class="videoSelected"
+            *ngIf="video.status !== -1"
+            [checked]="true"
+            [disabled]="video.status !== -1 || disableSelection"
+            [color]="'primary'">
+        </mat-checkbox>
 
-          <mat-checkbox class="videoSelected"
-              *ngIf="video.progress.finish"
-              [(ngModel)]="video.progress.finish"
-              [checked]="video.progress.finish"
-              [disabled]="video.progress.finish || disableSelection"
-              [color]="'primary'">
-          </mat-checkbox>
+        <div class="videoThumb">
+            <img [src]="video.thumb" alt=""
+                [class.hidded]="video.status !== -1">
 
-          <div class="videoThumb">
-              <img [src]="video.thumb" alt="">
-          </div>
+            <div class="progressDetail" *ngIf="video.status !== -1">
+                <div class="detailTitle">Download</div>
+                <div class="detailNbr">{{ video.progress?.percent }} %</div>
+                <div class="detailNbr">{{ video.progress?.downloaded }}/{{ video.progress?.total }} Mo</div>
+            </div>
 
-          <div class="videoInfos">
-              <span class="videoDuration">{{ video.duration | duration }}</span>
-              <span class="videoTitle"> - {{ video.title }}</span>
-          </div>
-      </div>
+            <!--
+                <div class="progressDetail">
+                    <div class="detailTitle">Download</div>
+                    <div class="detailNbr">2.068</div>
+                    <div class="detailNbr">4.463 Mo</div>
+                </div>
+            -->
+        </div>
 
-      <div class="videoListItemBackground"
-          [class.finished]="video.progress.finish"
-          [ngClass]="oddEvenClass"></div>
+        <div class="videoInfos">
+            <span class="videoDuration">{{ video.duration | duration }}</span>
+            <span class="videoTitle"> - {{ video.title }}</span>
+        </div>
+    </div>
 
-      <div class="downloadProgress" *ngIf="!video.progress.finish"
-          [style.width]="video.progress.download?.percent + '%'"></div>
+    <div class="videoListItemBackground"
+        [class.finished]="video.status === 3"
+        [ngClass]="oddEvenClass">
+    </div>
 
-      <div class="convertProgress" *ngIf="!video.progress.finish"
-          [style.width]="video.progress.convert?.percent + '%'"></div>
+    <div class="downloadProgress" *ngIf="video.status !== -1 && video.status !== 3"
+        [style.width]="video.progress?.percent + '%'">
+    </div>
 
-  </div>
+</div>

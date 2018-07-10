@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppStateService } from 'core/services/app-state.service';
+import { DataService } from 'core/services/data.service';
 import { UtilsService } from 'core/services/utils.service';
 import { AppState } from 'shared/models/app-state';
 
@@ -13,32 +13,31 @@ export class HeaderComponent implements OnInit {
     appState: AppState;
 
     constructor(
-    private appStateSrv: AppStateService,
+    private dataSrv: DataService,
     private utilsSrv: UtilsService
     ) { }
 
     ngOnInit() {
-        this.appStateSrv.appState$.subscribe((data) => {
+        this.dataSrv.appState$.subscribe((data) => {
             this.appState = data;
         });
     }
 
     onInputChange(event) {
-        this.appStateSrv.setInputValue(event);
+        this.dataSrv.setInputValue(event);
         this.utilsSrv.parseInputValue(event);
     }
 
     clearInput() {
-        this.appStateSrv.setInputValue('');
-        this.appStateSrv.setNotFound(false);
+        this.dataSrv.setInputValue('');
+        this.dataSrv.setNotFound(false);
     }
 
     openSettings() {
-        this.appStateSrv.setSelectedTab(1);
+        this.dataSrv.setSelectedTab(1);
     }
 
     closeSettings() {
-        this.appStateSrv.setSelectedTab(0);
+        this.dataSrv.setSelectedTab(0);
     }
-
 }
