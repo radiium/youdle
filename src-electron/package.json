@@ -22,6 +22,7 @@
     "main": "electron.js",
     "dependencies": {
         "electron-context-menu": "^0.9.1",
+        "electron-json-storage": "^4.1.0",
         "ffmpeg-static": "^2.3.0",
         "fluent-ffmpeg": "^2.1.2"
     }
