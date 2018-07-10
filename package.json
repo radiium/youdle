@@ -60,6 +60,7 @@
         "async": "^2.6.1",
         "core-js": "^2.5.4",
         "electron-context-menu": "^0.10.0",
+        "electron-json-storage": "^4.1.0",
         "ffmpeg-static": "^2.3.0",
         "fluent-ffmpeg": "^2.1.2",
         "fs-extra": "^6.0.1",
