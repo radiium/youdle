@@ -3,24 +3,28 @@
     <!-- Save path -->
     <div class="labelRow">save as:</div>
     <div class="settingsRow">
-        <div class="settingsInput">{{ settings?.savePath }}</div>
-        <button class="settingsBtn" (click)="editSavePath()">
-            <mat-icon svgIcon="pencil"></mat-icon>
-        </button>
+        <div class="settingsInputWrapper" (click)="editSavePath()">
+            <div class="settingsInput">{{ settings?.savePath }}</div>
+            <button class="settingsBtn">
+                <mat-icon svgIcon="pencil"></mat-icon>
+            </button>
+        </div>
     </div>
 
     <!-- Concurrent download -->
-    <div class="labelRow">Simultaneous download:</div>
+    <div class="labelRow otherRow">Simultaneous download:</div>
     <div class="settingsRow">
-        <button class="settingsBtn" (click)="decrement()">
-            <mat-icon svgIcon="minus-circle-outline"></mat-icon>
-        </button>
-        <div class="settingsInput settingsInputConcDl" type="number">
-            {{ settings.concurrentDownload }}
+        <div class="concurrentDownloadInputWrapper">
+            <button class="settingsBtn" (click)="decrement()">
+                <mat-icon svgIcon="minus-circle-outline"></mat-icon>
+            </button>
+            <div class="settingsInput settingsInputConcDl" type="number">
+                {{ settings.concurrentDownload }}
+            </div>
+            <button class="settingsBtn" (click)="increment()">
+                <mat-icon svgIcon="plus-circle-outline"></mat-icon>
+            </button>
         </div>
-        <button class="settingsBtn" (click)="increment()">
-            <mat-icon svgIcon="plus-circle-outline"></mat-icon>
-        </button>
     </div>
 
 </div>
