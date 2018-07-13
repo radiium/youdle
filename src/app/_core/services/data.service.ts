@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import * as _ from 'lodash';
-import { AppState, Settings, YoutubeVideo } from 'shared/models';
+import { AppState, Settings, YoutubeVideo, Message, MessageType } from 'shared/models';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +14,7 @@ export class DataService {
         loader: false,
         notFound: false,
         inputValue: '',
-        selectedTab: 0,
+        selectedTab: 2, // 0,
         videoList: [],
         savePath: ''
     };
@@ -32,6 +32,16 @@ export class DataService {
     // Video list
     private videoList  = new BehaviorSubject<YoutubeVideo[]>([]);
     public  videoList$ = this.videoList.asObservable();
+
+    // Message
+    private messageDefault = {
+        type: MessageType.SUCCESS,
+        title: 'SUCCESS',
+        description: '1 items downloaded'
+
+    };
+    private message  = new BehaviorSubject<Message>(this.messageDefault);
+    public  message$ = this.message.asObservable();
 
     constructor(
     private electronSrv: ElectronService) {
@@ -109,5 +119,10 @@ export class DataService {
     // Video list
     setVideoList(data) {
         this.videoList.next(_.cloneDeep(data));
+    }
+
+    // Message
+    setMessage(data) {
+        this.message.next(_.cloneDeep(data));
     }
 }

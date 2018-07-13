@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 
 import { ElectronService } from 'ngx-electron';
 import { DataService } from 'core/services/data.service';
-import { AppState, Settings, YoutubeVideo, ProgressStatus } from 'shared/models';
+import { AppState, Settings, YoutubeVideo, ProgressStatus, Message, MessageType } from 'shared/models';
 
 @Component({
     selector: 'app-content',
@@ -66,6 +66,10 @@ export class ContentComponent implements OnInit {
         this.electronSrv.ipcRenderer.on('onDownloadEnd', (event, data) => {
             this.downloadNext();
             this.setVideoStatus(data.id, ProgressStatus.ENDED, null);
+
+            if (this.finishedCount === this.downloaded.length) {
+                this.onAllDownloadFinish();
+            }
         });
 
         this.electronSrv.ipcRenderer.on('onDownloadCancel', (event, data) => {
@@ -166,6 +170,26 @@ export class ContentComponent implements OnInit {
         _.forEach(this.downloaded, (video) => {
             this.electronSrv.ipcRenderer.send('cancelDownload.' + video.id);
         });
+    }
+
+    onAllDownloadFinish() {
+        const message: Message = {
+            type: MessageType.SUCCESS,
+            title: 'Success',
+            description: this.getMessageDescription()
+        };
+        this.dataSrv.setMessage(message);
+        this.dataSrv.setInputValue('');
+        this.dataSrv.setVideoList([]);
+        this.dataSrv.setSelectedTab(2);
+    }
+    getMessageDescription() {
+        let desc = '';
+        desc += this.downloaded.length.toString();
+        desc += ' item';
+        desc += this.downloaded.length > 1 ? 's' : '';
+        desc += ' downloaded!';
+        return desc;
     }
 
     trackByFn(index, item) {
