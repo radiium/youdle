@@ -15,8 +15,7 @@ export class DataService {
         notFound: false,
         inputValue: '',
         selectedTab: 2, // 0,
-        videoList: [],
-        savePath: ''
+        downloadStarted: false
     };
     private appState  = new BehaviorSubject<AppState>(this.appStateDefault);
     public  appState$ = this.appState.asObservable();
@@ -82,6 +81,10 @@ export class DataService {
 
     setSelectedTab(data) {
         this.setAppStateByKey('selectedTab', data);
+    }
+
+    setDownloadStarted(data) {
+        this.setAppStateByKey('downloadStarted', data);
     }
 
 

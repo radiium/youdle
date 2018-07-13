@@ -9,4 +9,5 @@ export enum MessageType {
     INFO = 'INFO',
     ERROR = 'ERROR',
     SUCCESS = 'SUCCESS',
+    CANCEL = 'CANCEL',
 }

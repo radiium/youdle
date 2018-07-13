@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 
 import { ElectronService } from 'ngx-electron';
@@ -18,21 +18,18 @@ export class ContentComponent implements OnInit {
     downloaded: YoutubeVideo[];
     selected: YoutubeVideo[];
 
-    downloadStarted: boolean;
     finishedCount: number;
     selectedCount: number;
     allSelected: boolean;
     interSelected: boolean;
 
     constructor(
-    private renderer: Renderer2,
     private cdr: ChangeDetectorRef,
     private electronSrv: ElectronService,
     private dataSrv: DataService) {
 
         this.downloaded = [];
         this.selected = [];
-        this.downloadStarted = false;
         this.finishedCount = 0;
         this.selectedCount = 0;
         this.allSelected = false;
@@ -68,12 +65,13 @@ export class ContentComponent implements OnInit {
             this.setVideoStatus(data.id, ProgressStatus.ENDED, null);
 
             if (this.finishedCount === this.downloaded.length) {
-                this.onAllDownloadFinish();
+                this.onAllDownloadSuccess();
             }
         });
 
         this.electronSrv.ipcRenderer.on('onDownloadCancel', (event, data) => {
             this.setVideoStatus(data.id, ProgressStatus.CANCELLED, null);
+            this.onAllDownloadCancel();
         });
 
         this.electronSrv.ipcRenderer.on('onDownloadError', (event, data) => {
@@ -138,7 +136,7 @@ export class ContentComponent implements OnInit {
         for (let i = 0; i < this.settings.concurrentDownload; i++) {
             this.downloadNext();
         }
-        this.downloadStarted = true;
+        this.dataSrv.setDownloadStarted(true);
     }
 
     setVideoStatus(id, status, progress?) {
@@ -159,10 +157,10 @@ export class ContentComponent implements OnInit {
                 video: video,
             };
 
-            this.downloadStarted = true;
+            this.dataSrv.setDownloadStarted(true);
             this.electronSrv.ipcRenderer.send('download', data);
         } else {
-            this.downloadStarted = false;
+            this.dataSrv.setDownloadStarted(false);
         }
     }
 
@@ -172,17 +170,41 @@ export class ContentComponent implements OnInit {
         });
     }
 
-    onAllDownloadFinish() {
+    onAllDownloadSuccess() {
         const message: Message = {
             type: MessageType.SUCCESS,
             title: 'Success',
             description: this.getMessageDescription()
         };
+        this.update(message);
+    }
+
+    onAllDownloadError() {
+        const message: Message = {
+            type: MessageType.ERROR,
+            title: 'ERROR',
+            description: 'Somethings went wrong...'
+        };
+        this.update(message);
+    }
+
+    onAllDownloadCancel() {
+        const message: Message = {
+            type: MessageType.CANCEL,
+            title: 'Cancel',
+            description: ''
+        };
+        this.update(message);
+    }
+
+    update(message: Message) {
+        this.dataSrv.setDownloadStarted(false);
         this.dataSrv.setMessage(message);
         this.dataSrv.setInputValue('');
         this.dataSrv.setVideoList([]);
         this.dataSrv.setSelectedTab(2);
     }
+
     getMessageDescription() {
         let desc = '';
         desc += this.downloaded.length.toString();

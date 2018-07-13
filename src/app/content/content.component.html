@@ -17,7 +17,7 @@
                 (change)="onSelectAll($event)"
                 [checked]="allSelected"
                 [indeterminate]="interSelected"
-                [disabled]="(finishedCount === videoList.length) || downloadStarted"
+                [disabled]="(finishedCount === videoList.length) || appState.downloadStarted"
                 [color]="'primary'">
             </mat-checkbox>
 
@@ -32,7 +32,7 @@
 
             <button class="control"
                 mat-button
-                *ngIf="(videoList.length > 0) && !downloadStarted"
+                *ngIf="(videoList.length > 0) && !appState.downloadStarted"
                 [class.anim]="selectedCount > 0"
                 [disabled]="selectedCount === 0"
                 [class.controlDisabled]="selectedCount === 0"
@@ -43,7 +43,7 @@
 
             <button class="control"
                 mat-button
-                *ngIf="downloadStarted"
+                *ngIf="appState.downloadStarted"
                 [class.anim]="selectedCount > 0"
                 [class.controlDisabled]="selectedCount === 0"
                 (click)="cancelDownload()">
@@ -59,7 +59,7 @@
             *ngFor="let video of videoList; let i = index; let even = even; let odd = odd; trackBy: trackByFn"
             [video]="video"
             (videoChange)="updateSelection()"
-            [disableSelection]="downloadStarted"
+            [disableSelection]="appState.downloadStarted"
             [oddEvenClass]="odd ? 'odd': 'even'">
         </app-video-list-item>
     </div>

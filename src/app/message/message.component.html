@@ -5,7 +5,7 @@
 
     <div class="messageIcon">
         <img src="assets/icons/checked.svg" *ngIf="message.type === 'SUCCESS'">
-        <img src="assets/icons/cancel.svg" *ngIf="message.type === 'ERROR'">
+        <img src="assets/icons/cancel.svg" *ngIf="message.type === 'ERROR' || message.type === 'CANCEL'">
     </div>
 
     <div class="messageDesc">{{ message?.description }}</div>
