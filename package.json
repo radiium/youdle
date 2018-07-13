@@ -16,7 +16,11 @@
     "keywords": [
         "electron",
         "angular 6",
-        "typescript"
+        "typescript",
+        "ytdl",
+        "youtube",
+        "youtube downloader",
+        "youtube to mp3"
     ],
     "private": true,
     "scripts": {
