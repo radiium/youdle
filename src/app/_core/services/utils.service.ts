@@ -38,8 +38,6 @@ export class UtilsService {
             this.parseInputValue(clipboardValue);
         });
         */
-
-
     }
 
     parseInputValue(value) {
