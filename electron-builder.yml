@@ -15,15 +15,15 @@ directories:
   buildResources: "build"
 
 mac:
-  icon: "build/icons/mac/turntable1024.icns"
+  icon: "build/icons/mac/youdle.icns"
   category: "public.app-category.entertainment"
   identity: null
   target:
     - dmg
 dmg:
-  icon: "build/icons/mac/turntable128.icns"
+  icon: "build/icons/mac/youdle.icns"
   iconSize: 128
-  background: "build/icons/mac/turntable-bcg.png"
+  background: "build/icons/mac/youdle.png"
   contents:
     - x: 532
       y: 249
@@ -45,7 +45,7 @@ linux:
     - AppImage
 
 win:
-  icon: "build/icons/win/turntable1024.ico"
+  icon: "build/icons/win/youdle.ico"
   target:
     - nsis
 nsis:
