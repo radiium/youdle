@@ -29,9 +29,10 @@ export class UtilsService {
             this.videoList = data;
         });
 
+        // Dev sample youtube url
         // this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
 
-        /*
+        /* Get clip board value
         this.electronSrv.ipcRenderer.on('sendClipboardValue', (event, clipboardValue) => {
             console.log('sendClipboardValue=>', clipboardValue);
             this.dataSrv.setInputValue(clipboardValue);
