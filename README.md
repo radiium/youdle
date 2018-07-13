@@ -1,6 +1,6 @@
-# youdle
+# ![Youdle logo](https://github.com/radiium/youdle/blob/master/build/icons/linux/48x48.png) youdle
 
-> ![Youdle logo](https://github.com/radiium/youdle/blob/master/build/icons/linux/48x48.png) Youtube to mp3 downloader
+> Youtube to mp3 downloader
 
 
 ## Development:
