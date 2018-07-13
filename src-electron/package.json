@@ -24,6 +24,9 @@
         "electron-context-menu": "^0.9.1",
         "electron-json-storage": "^4.1.0",
         "ffmpeg-static": "^2.3.0",
-        "fluent-ffmpeg": "^2.1.2"
+        "fluent-ffmpeg": "^2.1.2",
+        "fs-extra": "^6.0.1",
+        "lodash": "^4.17.10",
+        "ytdl-core": "^0.20.4"
     }
 }
