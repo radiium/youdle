@@ -1,6 +1,6 @@
 # youdle
 
-> Electron angular youtube downloader
+> ![Youdle logo](https://github.com/radiium/youdle/build/icons/linux/16x16.png) Youtube to mp3 downloader
 
 
 ## Development:
@@ -16,6 +16,7 @@ npm run electron:dev
 npm run start:electron:reload
 
 # Package for: windows, ubuntu/debian and mac os
+npm run prepare:prod
 npm run dist
 ```
 
@@ -26,6 +27,9 @@ npm run dist
 - [angular material](https://material.angular.io/)
 - [electron](https://electron.atom.io/), [electron builder](https://github.com/electron-userland/electron-builder/) and [ngx-electron](https://github.com/ThorstenHans/ngx-electron)
 - [RxJS](http://reactivex.io/rxjs/)
+- [node-ytdl-core](https://github.com/fent/node-ytdl-core)
+- [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
+- [ffmpeg-static](https://github.com/zimbatm/ffmpeg-static)
 - [material design icons](https://materialdesignicons.com/)
 - [lodash](https://lodash.com/)
 - [moment](https://momentjs.com/)
