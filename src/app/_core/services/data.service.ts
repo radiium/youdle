@@ -14,7 +14,7 @@ export class DataService {
         loader: false,
         notFound: false,
         inputValue: '',
-        selectedTab: 2, // 0,
+        selectedTab: 0,
         downloadStarted: false
     };
     private appState  = new BehaviorSubject<AppState>(this.appStateDefault);
@@ -34,10 +34,9 @@ export class DataService {
 
     // Message
     private messageDefault = {
-        type: MessageType.SUCCESS,
-        title: 'SUCCESS',
-        description: '1 items downloaded'
-
+        type: MessageType.NONE,
+        title: '',
+        description: ''
     };
     private message  = new BehaviorSubject<Message>(this.messageDefault);
     public  message$ = this.message.asObservable();
