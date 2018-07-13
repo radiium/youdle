@@ -1,0 +1,17 @@
+<div class="messageWrapper">
+
+
+    <div class="messageTitle">{{ message?.title }}</div>
+
+    <div class="messageIcon">
+        <img src="assets/icons/checked.svg" *ngIf="message.type === 'SUCCESS'">
+        <img src="assets/icons/cancel.svg" *ngIf="message.type === 'ERROR'">
+    </div>
+
+    <div class="messageDesc">{{ message?.description }}</div>
+
+    <div class="messageBtn">
+        <button mat-stroked-button (click)="onReturn()">Return at home</button>
+    </div>
+
+</div>
