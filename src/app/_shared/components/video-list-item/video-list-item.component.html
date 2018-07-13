@@ -24,9 +24,9 @@
 
         <div class="videoThumb">
             <img [src]="video.thumb" alt=""
-                [class.hidded]="video.status !== -1">
+                [class.hidded]="video.status !== -1 && video.progress">
 
-            <div class="progressDetail" *ngIf="video.status !== -1">
+            <div class="progressDetail" *ngIf="video.status !== -1 && video.progress">
                 <div class="detailTitle">Download</div>
                 <div class="detailNbr">{{ video.progress?.percent }} %</div>
                 <div class="detailNbr">{{ video.progress?.downloaded }}/{{ video.progress?.total }} Mo</div>

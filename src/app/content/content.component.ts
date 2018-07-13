@@ -56,7 +56,7 @@ export class ContentComponent implements OnInit {
         });
 
         this.electronSrv.ipcRenderer.on('onDownloadProgress', (event, data) => {
-            console.log('onDownloadProgress', data);
+            // console.log('onDownloadProgress', data);
             this.setVideoStatus(data.id, ProgressStatus.PROGRESS, data.progress);
         });
 
@@ -79,7 +79,7 @@ export class ContentComponent implements OnInit {
         });
 
         this.electronSrv.ipcRenderer.on('onDownloadAllFinish', (event, data) => {
-            console.log('onDownloadAllFinish');
+            // console.log('onDownloadAllFinish');
         });
     }
 
@@ -198,6 +198,10 @@ export class ContentComponent implements OnInit {
     }
 
     update(message: Message) {
+        this.downloaded = [];
+        this.selected = [];
+        this.finishedCount = 0;
+        this.selectedCount = 0;
         this.dataSrv.setDownloadStarted(false);
         this.dataSrv.setMessage(message);
         this.dataSrv.setInputValue('');
