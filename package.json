@@ -1,8 +1,8 @@
 {
   "name": "youdle",
-  "version": "0.0.1",
+  "version": "1.0.0-beta",
   "license": "MIT",
-  "description": "Electron angular boilerplate",
+  "description": "Youtube mp3 downloader app",
   "homepage": "https://github.com/radiium/youdle",
   "repository": {
     "type": "git",
