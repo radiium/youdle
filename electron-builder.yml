@@ -47,7 +47,7 @@ dmg:
       type: file
 
 linux:
-  icon: "build/icons/linux/"
+  icon: "build/icons/png/"
   category: "GNOME;GTK;Music;AudioVideo"
   packageCategory: "GNOME;GTK;Music;AudioVideo"
   description: "Youtube mp3 downloader app"
