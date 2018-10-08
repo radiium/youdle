@@ -1,7 +1,7 @@
 
 import { ipcMain, app, dialog } from 'electron';
 import { handleError } from './error';
-import storage = require('electron-json-storage');
+import * as storage from 'electron-json-storage';
 
 
 
@@ -10,12 +10,9 @@ export function initStorage() {
     console.log('==============================================');
     console.log('initStorage (storage path: ' + storage.getDataPath() + ')');
 
-    console.log('Storage path', );
-
     // ----------------------------------------------------------------------------
     // SavePath management
     ipcMain.on('getSavePath', (event) => {
-
         storage.get('savePath', (error, data) => {
             if (error || !data) {
                 data = app.getPath('downloads') || '';
@@ -23,6 +20,7 @@ export function initStorage() {
             event.sender.send('getSavePathResp', data);
         });
     });
+
     ipcMain.on('setSavePath', (event, data) => {
         storage.set('savePath', data, (error) => {
             event.sender.send('getSavePathResp', data);
@@ -42,7 +40,6 @@ export function initStorage() {
             if (!selectedPath) {
                 selectedPath = savePathDefault;
             }
-
             storage.set('savePath', selectedPath, (error) => {
                 event.sender.send('getSavePathResp', selectedPath);
             });
@@ -59,6 +56,7 @@ export function initStorage() {
             event.sender.send('getConcurrentDownloadResp', data);
         });
     });
+
     ipcMain.on('setConcurrentDownload', (event, data) => {
         storage.set('concurrentDownload', data, (error) => {
             event.sender.send('getConcurrentDownloadResp', data);

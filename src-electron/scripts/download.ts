@@ -1,24 +1,26 @@
 
 
-import { ipcMain } from 'electron';
-import ytdl = require('ytdl-core');
-import ffmpeg = require('fluent-ffmpeg');
-import ffmpegStatic = require('ffmpeg-static');
-import fs = require('fs-extra');
-import path = require('path');
-import _ = require('lodash');
+import { app, ipcMain } from 'electron';
+import * as ytdl from 'ytdl-core';
+import * as ffmpeg from 'fluent-ffmpeg';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
 
 import { handleError } from './error';
-
-console.log('Set ffmpeg path', ffmpegStatic.path);
-ffmpeg.setFfmpegPath(ffmpegStatic.path);
-
-export const streamList = {};
 
 // ----------------------------------------------------------------------------
 // Download management
 
-export function initDownloadEvent() {
+export const streamList = {};
+
+export function initDownload(isDev) {
+
+    console.log('==============================================');
+    console.log('initDownload');
+
+    setFfmpegPath(isDev);
+
     ipcMain.on('download', (event, arg) => {
         console.log('=================');
         console.log('==> onDownload');
@@ -30,6 +32,7 @@ export function initDownloadEvent() {
         createStream(event, arg.video, arg.savePath);
     });
 
+    /* Useless...
     ipcMain.on('onCancelDownload', (event, arg) => {
         console.log('=================');
         console.log('==> onCancelDownload', streamList);
@@ -44,7 +47,35 @@ export function initDownloadEvent() {
             }
         }
     });
+    */
 }
+
+
+function setFfmpegPath(isDev) {
+    let ffmpegPath = '';
+    const platform = os.platform();
+    const arch = os.arch();
+    const ffmpegName = (platform === 'win32') ? 'ffmpeg.exe' : 'ffmpeg';
+
+    if (isDev) {
+        ffmpegPath = path.resolve(
+            app.getAppPath(),
+            '..',
+            'node_modules/ffmpeg-static/bin',
+            platform,
+            arch,
+            ffmpegName
+            );
+
+    } else {
+        ffmpegPath = path.join(process.resourcesPath, ffmpegName);
+    }
+
+    console.log('ffmpegPath', ffmpegPath);
+
+    ffmpeg.setFfmpegPath(ffmpegPath);
+}
+
 
 function createStream(event, video, savePath) {
 
@@ -52,6 +83,7 @@ function createStream(event, video, savePath) {
     const fileName = sanitize(video.title, '');
     const OUTPUT = path.resolve(savePath, fileName + '.mp3');
 
+    console.log('==> createStream => ytdl');
 
     const readStream = ytdl(video.id, { quality: 'highestaudio' })
     .once('response', (response) => {
@@ -66,8 +98,7 @@ function createStream(event, video, savePath) {
     })
     .on('error', (err) => {
         console.log(`[DOWNLOAD] ${video.id} => ERROR => `, err);
-        event.sender.send('onDownloadError', { id: video.id, error: err });
-        cancel(event, video, 'DOWNLOAD_ERROR');
+        cancelError(event, video, err);
     })
     .on('end', () => {
         console.log(`[DOWNLOAD] ${video.id} => END`);
@@ -79,6 +110,8 @@ function createStream(event, video, savePath) {
         console.log(`[DOWNLOAD] ${video.id} => FINISH`);
     });
 
+    console.log('==> createStream => ffmpeg');
+
     const ffmpegCmd = ffmpeg(readStream)
         .audioBitrate(192)
         .audioCodec('libmp3lame')
@@ -86,8 +119,7 @@ function createStream(event, video, savePath) {
         .save(OUTPUT)
         .on('error', (err) => {
             console.log(`[CONVERT] ${video.id} => ERROR`, err);
-            event.sender.send('onDownloadError', { id: video.id, error: err });
-            cancel(event, video, 'CONVERT_ERROR');
+            cancelError(event, video, err);
         })
         .on('end', () => {
             console.log(`[CONVERT] ${video.id} END`);
@@ -95,17 +127,27 @@ function createStream(event, video, savePath) {
         });
 
     ipcMain.on('cancelDownload.' + video.id, (evt, arg) => {
-        cancel(evt, video, 'CANCELED');
+        cancel(evt, video);
     });
 
-    const cancel = (ev, vid, from) => {
-        console.log(`[${from}] ${video.id} => `, vid.id);
+    const cancel = (ev, vid) => {
+        console.log(`[CANCEL] => ${video.id}/${vid.id}`, vid.id);
         readStream.destroy(new Error(``));
         ffmpegCmd.kill();
         if (fs.existsSync(OUTPUT)) {
             fs.unlinkSync(OUTPUT);
         }
         ev.sender.send('onDownloadCancel', { id: video.id });
+    };
+
+    const cancelError = (ev, vid, err) => {
+        console.log(`[CANCEL_ERROR] => ${video.id}/${vid.id}`, vid.id);
+        readStream.destroy(new Error(``));
+        ffmpegCmd.kill();
+        if (fs.existsSync(OUTPUT)) {
+            fs.unlinkSync(OUTPUT);
+        }
+        event.sender.send('onDownloadError', { id: video.id, error: err });
     };
 }
 
@@ -154,4 +196,3 @@ function sanitize(input, replacement) {
         .replace(windowsTrailingRe, replacement);
     return sanitized;
 }
-

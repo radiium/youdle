@@ -2,19 +2,15 @@
 
 require('events').EventEmitter.prototype._maxListeners = 0;
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-console.log(`Electron launching with NODE_ENV: ${process.env.NODE_ENV}`);
-
-
 // Import dependencies
-import { app, BrowserWindow, ipcMain, Menu, dialog, clipboard } from 'electron';
-import contextMenu = require('electron-context-menu');
+import { app, BrowserWindow, Menu } from 'electron';
+import * as contextMenu from 'electron-context-menu';
 import { initStorage } from './scripts/storage';
-import { initDownloadEvent } from './scripts/download';
+import { initDownload } from './scripts/download';
 
-import url = require('url');
-import path = require('path');
-
+import * as path from 'path';
+import * as url from 'url';
+import * as log from 'electron-log';
 
 import { devMenuTemplate } from './menu/dev_menu.template';
 import { fileMenuTemplate } from './menu/file_menu.template';
@@ -24,15 +20,23 @@ import { editMenuTemplate } from './menu/edit_menu.template';
 // Init variable
 let mainWindow: any = null;
 const menus: any[] = [];
-const isDev = process.env.NODE_ENV === 'development' ? true : false;
+
+const args = process.argv.slice(1);
+const isDev = args.some(val => val === '--dev');
+log.info('COUCOU');
+console.log('isDev', isDev);
+console.log('Electron launching mode :', isDev ? 'development' : 'production');
 
 
 // Init context menu
 if (isDev) {
     contextMenu({
-        prepend: (params, browserWindow) => []
+        prepend: (params, browserWindow) => [{
+            label: 'Rainbow'
+        }]
     });
 }
+
 
 // Create main window
 const createMainWindow = async () => {
@@ -42,31 +46,21 @@ const createMainWindow = async () => {
         width: 500,
         height: 325,
         minWidth: 500,
-        minHeight: 300, // 196, // 174, // 125,
-        // transparent: true,
-        // frame: false,
-        // titleBarStyle: 'hiddenInset', // 'customButtonsOnHover',
-        // thickFrame: false,
-        // backgroundColor: '#3D444C',
+        minHeight: 300,
         darkTheme: true,
-        // vibrancy: 'dark',
+        backgroundColor: '#3b8d99',
         webPreferences: {
             nodeIntegration: true,
-            // contextIsolation: true,
-            // experimentalFeatures: true // For prevent angular/animation error
         }
     });
 
-    // DEV mode => Load app with live reload
+    // Entry point
     if (isDev) {
         require('electron-reload')(__dirname, {
             electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
             hardResetMethod: 'exit'
         });
         mainWindow.loadURL('http://localhost:4200');
-        mainWindow.webContents.openDevTools();
-
-    // PROD mode => Load app
     } else {
         mainWindow.loadURL(url.format({
             pathname: path.join(__dirname, 'index.html'),
@@ -78,29 +72,18 @@ const createMainWindow = async () => {
     mainWindow.on('closed', () => mainWindow = null);
     mainWindow.once('ready-to-show', () => mainWindow.show());
 
+    // Dev tools
+    mainWindow.webContents.openDevTools();
+    menus.push(devMenuTemplate);
 
     // Build menus
     menus.push(fileMenuTemplate);
     menus.push(editMenuTemplate);
-    if (isDev) {
-        menus.push(devMenuTemplate);
-    }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
-    // console.log('Data path:', storage.getDataPath());
 };
 
-
-
 // On app is ready
-app.on('ready', () => {
-    createMainWindow();
-
-    const width = mainWindow.getSize()[0];
-    const height = (process.platform === 'darwin') ? 125 : 100;
-    mainWindow.setSize(width, height);
-    // mainWindow.setMinSize(width, height);
-    // mainWindow.setMaxSize(width, height);
-});
+app.on('ready', () => createMainWindow() );
 
 // On close app event
 app.on('window-all-closed', () => {
@@ -118,22 +101,15 @@ app.on('activate', () => {
 
 // Clear cahe and cookie session before quit
 app.on('before-quit', () => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (!isDev) {
         mainWindow.webContents.session.clearStorageData();
     }
 });
 
-app.on('browser-window-focus', (event, focusedWindow) => {
-    // console.log('browser-window-focus');
-    // console.log('clipboard', clipboard.readText());
-    event.sender.send('sendClipboardValue', clipboard.readText());
-});
-
 initStorage();
-initDownloadEvent();
+initDownload(isDev);
 
-
-export function errorHandler(error) {
+process.on('uncaughtException', (error: any) => {
     const msg: any = {
         type : 'error',
         title : 'Uncaught Exception',
@@ -152,6 +128,8 @@ export function errorHandler(error) {
     }
 
     msg.detail = 'Please check the console log for more details.';
-    mainWindow.send('onElectronError', msg);
-}
-process.on('uncaughtException', errorHandler);
+    if (mainWindow) {
+        mainWindow.send('onElectronError', msg);
+    }
+    console.log('ELECTRON UNCAUGHT ERROR', msg);
+});
