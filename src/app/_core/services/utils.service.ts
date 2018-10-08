@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { DataService } from 'core/services/data.service';
 import { YoutubeService } from 'core/services/youtube.service';
-import { YoutubeVideo, ProgressStatus } from 'shared/models/youtube-video';
 import { ElectronService } from 'ngx-electron';
-import { AppState } from 'shared/models/app-state';
+import { AppState, Search, Item, ProgressStatus } from 'core/services/data.models';
 
 @Injectable({
     providedIn: 'root'
@@ -14,36 +13,31 @@ import { AppState } from 'shared/models/app-state';
 export class UtilsService {
 
     appState: AppState;
-    videoList: YoutubeVideo[];
+    search: Search;
 
     constructor(
     private electronSrv: ElectronService,
     private datateSrv: DataService,
     private ytSrv: YoutubeService) {
+
         this.datateSrv.appState$.subscribe((data) => {
             this.appState = data;
-            // this.updateHeight();
         });
 
-        this.datateSrv.videoList$.subscribe((data) => {
-            this.videoList = data;
+        this.datateSrv.search$.subscribe((data) => {
+            this.search = data;
         });
 
         // Dev sample youtube url
-        // this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
-
-        /* Get clip board value
-        this.electronSrv.ipcRenderer.on('sendClipboardValue', (event, clipboardValue) => {
-            console.log('sendClipboardValue=>', clipboardValue);
-            this.dataSrv.setInputValue(clipboardValue);
-            this.parseInputValue(clipboardValue);
-        });
-        */
+        if (isDevMode) {
+            // this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
+            this.parseInputValue('https://www.youtube.com/watch?list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj');
+        }
     }
 
     parseInputValue(value) {
 
-        this.datateSrv.setloader(true);
+        this.datateSrv.setLoader(true);
 
         let videoList = [];
         let resource = this.extractID(value);
@@ -59,7 +53,7 @@ export class UtilsService {
         if (resource && resource.type === 'video') {
             this.ytSrv.getVideosById(resource.id).subscribe(
                 (data: any) => {
-                    console.log('getVideosById');
+                    // console.log('getVideosById');
                     if (data && data.items[0]) {
                         videoList.push(this.parseVideo(data.items[0], true));
                     }
@@ -70,7 +64,7 @@ export class UtilsService {
         } else if (resource && resource.type === 'playlist') {
             this.ytSrv.fetchYoutubePlaylists(resource.id).subscribe(
                 (data: any) => {
-                    console.log('getPlaylists');
+                    // console.log('getPlaylists');
                     if (data && data.length > 0) {
                         videoList = _.map(data, (video) => {
                             return this.parseVideo(video, false);
@@ -90,40 +84,11 @@ export class UtilsService {
         if (videoList.length === 1) {
             videoList[0].selected = true;
         }
-        this.datateSrv.setVideoList(videoList);
-        this.datateSrv.setloader(false);
+        this.datateSrv.setItems(videoList);
+        this.datateSrv.setLoader(false);
 
-        const notFound = ((videoList && videoList.length === 0) && (value && value.length > 0));
-        this.datateSrv.setNotFound(notFound);
-    }
-
-    updateHeight() {
-        let height;
-        if (this.appState.selectedTab === 0) {
-            if (this.videoList.length === 0) {
-                height = 100;
-            } else if (this.videoList.length === 1) {
-                height = 160;
-            } else if (this.videoList.length > 1) {
-                height = 370;
-            }
-        } else if (this.appState.selectedTab === 1) {
-            height = 160;
-        }
-
-        this.setWindowHeight(height);
-    }
-
-    setWindowHeight(height) {
-        const win = this.electronSrv.remote.getCurrentWindow();
-        const screenHeight = this.electronSrv.screen.getPrimaryDisplay().workAreaSize.height;
-
-        const currentWidth = win.getSize()[0];
-        const currentHeight = win.getSize()[1];
-
-        if (currentHeight < screenHeight) {
-            win.setSize(currentWidth, height);
-        }
+        const noResult = ((videoList && videoList.length === 0) && (value && value.length > 0));
+        this.datateSrv.setNoResult(noResult);
     }
 
     validUrl(str) {
@@ -136,19 +101,19 @@ export class UtilsService {
         let list = url.match('list=([a-zA-Z0-9\-\_]+)&?');
         list = list ? list[1] : '';
 
-        if (match && match[7].length === 11) {
-            // console.log('extractID video', match[7]);
-            return { type: 'video', id: match[7] };
-        } else if (list !== '') {
+        if (list !== '') {
             // console.log('extractID playlist', list);
             return { type: 'playlist', id: list };
+        } else if (match && match[7].length === 11) {
+            // console.log('extractID video', match[7]);
+            return { type: 'video', id: match[7] };
         } else {
             // console.log('Could not extract video ID.');
             return null;
         }
     }
 
-    parseVideo(data, preSelect): YoutubeVideo {
+    parseVideo(data, preSelect): Item {
         return {
             id: data.id,
             title: _.deburr(data.snippet.localized.title),

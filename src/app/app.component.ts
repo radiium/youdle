@@ -1,25 +1,28 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { DataService } from 'core/services/data.service';
-import { AppState } from 'shared/models/app-state';
+import { Component } from '@angular/core';
+
+/*
+import { ElectronService } from 'core/services/electron.service';
+import { AppConfig } from '../environments/environment';
+*/
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-
-    appState: AppState;
-
-    constructor(
-    private datateSrv: DataService,
-    private cdRef: ChangeDetectorRef) {
+export class AppComponent {
+  constructor(
+    // public electronService: ElectronService
+    ) {
+    /*
+    console.log('AppConfig', AppConfig);
+    if (electronService.isElectron()) {
+      console.log('Mode electron');
+      console.log('Electron ipcRenderer', electronService.ipcRenderer);
+      console.log('NodeJS childProcess', electronService.childProcess);
+    } else {
+      console.log('Mode web');
     }
-
-    ngOnInit() {
-        this.datateSrv.appState$.subscribe((data) => {
-            this.appState = data;
-            this.cdRef.detectChanges();
-        });
-    }
+    */
+  }
 }

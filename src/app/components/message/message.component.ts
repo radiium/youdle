@@ -1,7 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataService } from 'core/services/data.service';
-import { Settings, Message, MessageType } from 'shared/models';
-import { Title } from '../../../node_modules/@angular/platform-browser';
+import { Message, MessageType } from 'core/services/data.models';
 
 @Component({
     selector: 'app-message',
@@ -10,18 +10,14 @@ import { Title } from '../../../node_modules/@angular/platform-browser';
 })
 export class MessageComponent implements OnInit {
 
-    settings: Settings;
     message: Message;
 
     constructor(
+    private router: Router,
     private dataSrv: DataService) {
     }
 
     ngOnInit() {
-        this.dataSrv.settings$.subscribe((data) => {
-            this.settings = data;
-        });
-
         this.dataSrv.message$.subscribe((data) => {
             this.message = data;
         });
@@ -33,7 +29,7 @@ export class MessageComponent implements OnInit {
             title: '',
             description: ''
         };
-        this.dataSrv.setSelectedTab(0);
         this.dataSrv.setMessage(message);
+        this.router.navigateByUrl('/content');
     }
 }

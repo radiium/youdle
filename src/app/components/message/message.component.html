@@ -1,0 +1,23 @@
+<div class="pageWrapper">
+
+    <!-- Header toolbar -->
+    <mat-toolbar class="header">
+        <div class="flexSpacer"></div>
+        <button class="navBtn" routerLink="/content">
+            <mat-icon svgIcon="arrow-left-thick"></mat-icon>
+        </button>
+    </mat-toolbar>
+
+    <!-- Message -->
+    <div class="messageBox">
+        <div class="messageTitle messageItem" *ngIf="message?.title">{{ message?.title }}</div>
+        <div class="messageIcon messageItem">
+            <img src="assets/icons/checked.svg" *ngIf="message.type === 'SUCCESS'">
+            <img src="assets/icons/cancel.svg" *ngIf="message.type !== 'SUCCESS'">
+            <!--
+                *ngIf="message.type === 'ERROR' || message.type === 'CANCEL'"
+            -->
+        </div>
+        <div class="messageDesc messageItem" *ngIf="message?.description">{{ message?.description }}</div>
+    </div>
+</div>

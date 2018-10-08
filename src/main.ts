@@ -1,13 +1,15 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import 'hammerjs';
 
 import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import { AppConfig } from './environments/environment';
 
-if (environment.production) {
+if (AppConfig.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+platformBrowserDynamic()
+  .bootstrapModule(AppModule, {
+    preserveWhitespaces: false
+  })
+  .catch(err => console.error(err));

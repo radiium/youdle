@@ -1,39 +1,44 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
+import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
-import { AppState, Settings, YoutubeVideo, Message, MessageType } from 'shared/models';
+
+import { SelectionModel } from '@angular/cdk/collections';
+import { AppState, Settings, Message, Search, Item, MessageType } from './data.models';
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class DataService {
 
-    // App State
-    appStateDefault = {
+    // Loader
+    appStateDefault: AppState = {
         loader: false,
-        notFound: false,
-        inputValue: '',
-        selectedTab: 0,
+        noResult: false,
         downloadStarted: false
     };
     private appState  = new BehaviorSubject<AppState>(this.appStateDefault);
     public  appState$ = this.appState.asObservable();
 
+
     // Settings
-    private settingsDefault = {
+    settingsDefault: Settings = {
         savePath: '',
         concurrentDownload: 4
     };
     private settings  = new BehaviorSubject<Settings>(this.settingsDefault);
     public  settings$ = this.settings.asObservable();
 
-    // Video list
-    private videoList  = new BehaviorSubject<YoutubeVideo[]>([]);
-    public  videoList$ = this.videoList.asObservable();
+    private coucou  = new BehaviorSubject<Settings>({
+        savePath: '',
+        concurrentDownload: 4
+    });
+    public  coucou$ = this.coucou.asObservable();
+
 
     // Message
-    private messageDefault = {
+    messageDefault: Message = {
         type: MessageType.NONE,
         title: '',
         description: ''
@@ -41,54 +46,54 @@ export class DataService {
     private message  = new BehaviorSubject<Message>(this.messageDefault);
     public  message$ = this.message.asObservable();
 
+
+    // Search
+    searchDefault: Search = {
+        inputValue: '',
+        items: [],
+        selectedItems: new SelectionModel<Item>()
+    };
+    private search  = new BehaviorSubject<Search>(this.searchDefault);
+    public  search$ = this.search.asObservable();
+
+
     constructor(
-    private electronSrv: ElectronService) {
+        private electronSrv: ElectronService) {
+            this.electronSrv.ipcRenderer.send('getSavePath');
+            this.electronSrv.ipcRenderer.on('getSavePathResp', (event, data) => {
+                this.setSavePath(data);
+            });
 
-        this.electronSrv.ipcRenderer.send('getSavePath');
-        this.electronSrv.ipcRenderer.on('getSavePathResp', (event, data) => {
-            this.setSavePath(data);
-        });
-
-        this.electronSrv.ipcRenderer.send('getConcurrentDownload');
-        this.electronSrv.ipcRenderer.on('getConcurrentDownloadResp', (event, data) => {
-            this.setConcurrentDownload(data);
-        });
+            this.electronSrv.ipcRenderer.send('getConcurrentDownload');
+            this.electronSrv.ipcRenderer.on('getConcurrentDownloadResp', (event, data) => {
+                this.setConcurrentDownload(data);
+            });
     }
 
-    // App State
-    setAppState(data) {
+    // AppState
+    setAppState(data: AppState) {
         this.appState.next(_.cloneDeep(data));
     }
-
     setAppStateByKey(key, value) {
         const appState = this.appState.getValue();
         appState[key] = value;
         this.setAppState(appState);
     }
 
-    setloader(data) {
+    setLoader(data: boolean) {
+        this.setAppStateByKey('', data);
         this.setAppStateByKey('loader', data);
-    }
 
-    setNotFound(data) {
-        this.setAppStateByKey('notFound', data);
     }
-
-    setInputValue(data) {
-        this.setAppStateByKey('inputValue', data);
+    setNoResult(data: boolean) {
+        this.setAppStateByKey('noResult', data);
     }
-
-    setSelectedTab(data) {
-        this.setAppStateByKey('selectedTab', data);
-    }
-
-    setDownloadStarted(data) {
+    setDownloadStarted(data: boolean) {
         this.setAppStateByKey('downloadStarted', data);
     }
 
-
     // Settings
-    setSettings(data) {
+    setSettings(data: Settings) {
         this.settings.next(_.cloneDeep(data));
     }
     setSettingsByKey(key, value) {
@@ -96,35 +101,46 @@ export class DataService {
         settings[key] = value;
         this.setSettings(settings);
     }
-
     setSavePath(data) {
         this.setSettingsByKey('savePath', data);
     }
-
     setConcurrentDownload(data) {
         this.setSettingsByKey('concurrentDownload', data);
     }
-
+    //
     setStoreSavePath(savePath: string) {
         this.electronSrv.ipcRenderer.send('setSavePath', savePath);
     }
-
     setStoreConcurrentDownload(concurrentDownload: number) {
         this.electronSrv.ipcRenderer.send('setConcurrentDownload', concurrentDownload);
     }
-
-    // Save path
     editSavePath() {
         this.electronSrv.ipcRenderer.send('editSavePath', { filePath: this.settings.getValue().savePath });
     }
 
-    // Video list
-    setVideoList(data) {
-        this.videoList.next(_.cloneDeep(data));
-    }
 
     // Message
-    setMessage(data) {
+    setMessage(data: Message) {
         this.message.next(_.cloneDeep(data));
+    }
+
+
+    // Search
+    setSearch(data: Search) {
+        this.search.next(_.cloneDeep(data));
+    }
+    setSearchByKey(key, value) {
+        const search = this.search.getValue();
+        search[key] = value;
+        this.setSearch(search);
+    }
+    setInputValue(data: string) {
+        this.setSearchByKey('inputValue', data);
+    }
+    setItems(data: Item[]) {
+        this.setSearchByKey('items', data);
+    }
+    setSelectedItems(data: SelectionModel<Item>) {
+        this.setSearchByKey('selectedItems', data);
     }
 }

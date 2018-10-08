@@ -1,0 +1,88 @@
+
+
+<div class="pageWrapper" *ngIf="appState && search.items">
+
+    <!-- Header toolbar -->
+    <mat-toolbar class="header">
+        <input class="inputBar" type="text" #inputBar
+            [disabled]="appState.downloadStarted"
+            [class.clearable]="search.inputValue !== ''"
+            placeholder="Paste video or playlist url or id.."
+            [ngModel]="search.inputValue"
+            (ngModelChange)="onInputChange($event)"
+            [ngModelOptions]="{standalone: true}">
+        <button class="clearBtn" *ngIf="inputBar.value" (click)="clearInput()"
+            [disabled]="appState.downloadStarted">
+            <mat-icon class="clearBtnIco" svgIcon="close"></mat-icon>
+        </button>
+        <button class="navBtn" routerLink="/settings"
+            [disabled]="appState.downloadStarted"
+            [class.controlDisabled]="appState.downloadStarted">
+        <mat-icon svgIcon="settings"></mat-icon>
+        </button>
+    </mat-toolbar>
+
+
+    <!-- Toolbar -->
+    <div class="contentToolbar">
+
+        <div class="loader" *ngIf="appState.loader">
+            <app-loader></app-loader>
+        </div>
+
+        <div class="noResultMsg" *ngIf="appState.noResult && !appState.loader">
+            <div>Nothing found...</div>
+        </div>
+
+        <div class="toolbarControl" *ngIf="!appState.noResult && !appState.loader"
+            [class.borderToolBar]="search.items.length > 0">
+            <mat-checkbox class="masterSelect" *ngIf="search.items.length > 1"
+                (change)="onSelectAll($event)"
+                [checked]="selectAllState.all"
+                [indeterminate]="selectAllState.inter"
+                [disabled]="(count.finished === search.items.length) || appState.downloadStarted"
+                [color]="'primary'">
+            </mat-checkbox>
+
+            <div class="counter" *ngIf="search.items.length > 0">
+                <span *ngIf="search.items.length > 1">{{ count.selected }}/</span>
+                <span>{{ search.items.length }} </span>
+                <span> Track</span>
+                <span *ngIf="search.items.length > 1">s</span>
+            </div>
+
+            <div class="flexSpacer" *ngIf="search.items.length > 0"></div>
+
+            <button class="control" mat-button
+                *ngIf="(search.items.length > 0) && !appState.downloadStarted"
+                [class.anim]="count.selected > 0"
+                [disabled]="count.selected === 0"
+                [class.controlDisabled]="count.selected === 0"
+                (click)="startDownload()">
+                <mat-icon class="controlIcon" svgIcon="cloud-download"></mat-icon>
+                <span class="controlText">Download</span>
+            </button>
+
+            <button class="control" mat-button
+                *ngIf="appState.downloadStarted"
+                [class.anim]="count.selected > 0"
+                [class.controlDisabled]="count.selected === 0"
+                (click)="cancelDownload()">
+                <mat-icon class="controlIcon" svgIcon="close-octagon-outline"></mat-icon>
+                <span class="controlText">Cancel</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Items List -->
+    <div class="contentBox" *ngIf="!appState.loader">
+        <app-video-list-item
+            *ngFor="let item of search.items; let i = index; let even = even; let odd = odd; trackBy: trackByFn"
+            [video]="item"
+            (videoChange)="updateSelection()"
+            [disableSelection]="appState.downloadStarted"
+            [oddEvenClass]="odd ? 'odd': 'even'">
+        </app-video-list-item>
+    </div>
+
+</div>

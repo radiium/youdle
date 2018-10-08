@@ -19,16 +19,8 @@
 
         &.even {
             background-color: rgba(0, 0, 0, 0.2);
-            &.finished {
-                background-color: gray;
-            }
         }
-        &.odd {
-            // background-color: rgba(0, 0, 0, 0.3);
-            &.finished {
-                background-color: lightgray;
-            }
-        }
+        // &.odd { background-color: rgba(0, 0, 0, 0.3); }
     }
 
     .videoListItem {
@@ -76,8 +68,7 @@
                 height: 100%;
                 text-align: center;
 
-                .detailTitle {
-                }
+                // .detailTitle {}
                 .detailNbr {
                     font-size: 0.8rem;
                 }
@@ -88,7 +79,10 @@
         .videoInfos {
             overflow: hidden;
             padding: 3px 0 3px 0;
-            // line-height: 1.4rem;
+            line-height: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
 
             .videoDuration {
                 border: 1px solid white;
@@ -96,8 +90,7 @@
                 font-size: 0.7rem;
             }
 
-            .videoTitle {
-            }
+            // .videoTitle {}
 
             .videoSubInfos {
                 display: flex;
@@ -105,8 +98,8 @@
                 flex-wrap: nowrap;
                 font-size: 0.8rem;
 
-                .videoDuration {}
-                .videoDate {}
+                // .videoDuration {}
+                // .videoDate {}
             }
         }
     }

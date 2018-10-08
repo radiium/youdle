@@ -1,6 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { DataService } from 'core/services/data.service';
-import { Settings } from 'shared/models';
+import { Settings } from 'core/services/data.models';
 
 @Component({
     selector: 'app-settings',
@@ -13,15 +14,11 @@ export class SettingsComponent implements OnInit {
     savePath: string;
     settings: Settings;
 
-    constructor(
-    private cdr: ChangeDetectorRef,
-    private dataSrv: DataService) {
-    }
+    constructor(private dataSrv: DataService) {}
 
     ngOnInit() {
         this.dataSrv.settings$.subscribe((data) => {
             this.settings = data;
-            this.cdr.detectChanges();
         });
     }
 

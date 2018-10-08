@@ -1,9 +1,15 @@
-.contentWrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    color: white !important;
+.pageWrapper {
+
+    .header {
+        .controlDisabled {
+            cursor: default;
+            // color: rgb(226, 226, 226) !important;
+            opacity: 0.8;
+            &:hover {
+                background-color: transparent;
+            }
+        }
+    }
 
     .contentToolbar {
         display: flex;
@@ -20,7 +26,7 @@
             width: 100%;
         }
 
-        .notFoundMsg {
+        .noResultMsg {
             text-align: center;
             width: 100%;
             color: white;
@@ -59,8 +65,7 @@
                     animation: bounce 1s;
                 }
 
-                &.controlDisabled {
-                    // color: rgb(226, 226, 226) !important;
+                .controlDisabled {
                     opacity: 0.8;
                 }
 
@@ -77,6 +82,7 @@
 
     .contentBox {
         overflow: auto;
+        height: calc(100% - 50px);
 
 
         /*

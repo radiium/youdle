@@ -5,28 +5,31 @@
     -->
 
     <div class="videoListItem">
-
         <mat-checkbox class="videoSelected"
-            *ngIf="video.status === -1"
+            *ngIf="video.status === progressStatus.NONE"
             (change)="onVideoChange()"
             [(ngModel)]="video.selected"
             [checked]="video.selected"
-            [disabled]="video.status !== -1 || disableSelection"
+            [disabled]="video.status !== progressStatus.NONE || disableSelection"
             [color]="'primary'">
         </mat-checkbox>
 
         <mat-checkbox class="videoSelected"
-            *ngIf="video.status !== -1"
+            *ngIf="video.status !== progressStatus.NONE"
             [checked]="true"
-            [disabled]="video.status !== -1 || disableSelection"
+            [disabled]="video.status !== progressStatus.NONE || disableSelection"
             [color]="'primary'">
         </mat-checkbox>
 
         <div class="videoThumb">
-            <img [src]="video.thumb" alt=""
-                [class.hidded]="video.status !== -1 && video.progress">
+            <img *ngIf="video.status !== progressStatus.ENDED"
+                [src]="video.thumb" alt=""
+                [class.hidded]="video.status !== progressStatus.NONE && video.progress">
 
-            <div class="progressDetail" *ngIf="video.status !== -1 && video.progress">
+            <img *ngIf="video.status === progressStatus.ENDED"
+                src="assets/icons/checked.svg" alt="">
+
+            <div class="progressDetail" *ngIf="video.status !== progressStatus.NONE && video.progress">
                 <div class="detailTitle">Download</div>
                 <div class="detailNbr">{{ video.progress?.percent }} %</div>
                 <div class="detailNbr">{{ video.progress?.downloaded }}/{{ video.progress?.total }} Mo</div>
@@ -43,16 +46,15 @@
 
         <div class="videoInfos">
             <span class="videoDuration">{{ video.duration | duration }}</span>
-            <span class="videoTitle"> - {{ video.title }}</span>
+            <span class="videoTitle">&nbsp;&nbsp;{{ video.title }}</span>
         </div>
     </div>
 
     <div class="videoListItemBackground"
-        [class.finished]="video.status === 3"
         [ngClass]="oddEvenClass">
     </div>
 
-    <div class="downloadProgress" *ngIf="video.status !== -1 && video.status !== 3"
+    <div class="downloadProgress" *ngIf="video.status !== progressStatus.NONE && video.status !== progressStatus.ENDED"
         [style.width]="video.progress?.percent + '%'">
     </div>
 
