@@ -7,8 +7,23 @@ artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 compression: maximum
 npmRebuild: true
 nodeGypRebuild: false
-# files:
-#   - "node_modules/ffmpeg-static/"
+extraResources:
+  - from: "node_modules/ffmpeg-static/bin/${platform}/${arch}/"
+    to: ""
+    filter:
+      - "**/*"
+files:
+  - "**/*"
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}"
+  - "!postinstall.js"
+  - "!postinstall-web.js"
+  - "!**/*.{o,hprof,orig,pyc,pyo,rbc}"
+  - "!**/._*"
+  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}"
+  - "!**/node_modules/search-index/si${/*}"
+  # - "node_modules/ffmpeg-static/"
+  # - "!**/node_modules/.bin"
+
 directories:
   app: "dist"
   output: "release"
@@ -36,12 +51,11 @@ linux:
   icon: "build/icons/linux/"
   category: "GNOME;GTK;Music;AudioVideo"
   packageCategory: "GNOME;GTK;Music;AudioVideo"
-  description: "Electron angular boilerplate"
+  description: "Youtube downloader app"
   maintainer: "Radiium <remip.dev@gmail.com>"
   target:
     - deb
     - rpm
-    - AppImage
 
 win:
   icon: "build/icons/win/icon.ico"
