@@ -14,7 +14,7 @@ export function initStorage() {
     // SavePath management
     ipcMain.on('getSavePath', (event) => {
         storage.get('savePath', (error, data) => {
-            if (error || !data) {
+            if (error || !data || isEmpty(data)) {
                 data = app.getPath('downloads') || '';
             }
             event.sender.send('getSavePathResp', data);
@@ -50,7 +50,7 @@ export function initStorage() {
     // ConcurrentDownload management
     ipcMain.on('getConcurrentDownload', (event) => {
         storage.get('concurrentDownload', (error, data) => {
-            if (error || !data) {
+            if (error || !data || isEmpty(data)) {
                 data = 3;
             }
             event.sender.send('getConcurrentDownloadResp', data);
@@ -62,4 +62,13 @@ export function initStorage() {
             event.sender.send('getConcurrentDownloadResp', data);
         });
     });
+}
+
+function isEmpty(obj) {
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            return false;
+        }
+    }
+    return true;
 }
