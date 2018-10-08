@@ -61,6 +61,7 @@ const createMainWindow = async () => {
             hardResetMethod: 'exit'
         });
         mainWindow.loadURL('http://localhost:4200');
+        mainWindow.webContents.openDevTools();
     } else {
         mainWindow.loadURL(url.format({
             pathname: path.join(__dirname, 'index.html'),
@@ -72,13 +73,12 @@ const createMainWindow = async () => {
     mainWindow.on('closed', () => mainWindow = null);
     mainWindow.once('ready-to-show', () => mainWindow.show());
 
-    // Dev tools
-    mainWindow.webContents.openDevTools();
-    menus.push(devMenuTemplate);
 
     // Build menus
     menus.push(fileMenuTemplate);
     menus.push(editMenuTemplate);
+    // Dev tools
+    menus.push(devMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
