@@ -1,5 +1,5 @@
-# ![Youdle logo](/build/icons/png/48x48.png) youdle
-
+![Youdle logo](/build/icons/png/64x64.png)
+# Youdle
 ## A simple Youtube mp3 downloader app
 
 ## Screenshot:
