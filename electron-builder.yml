@@ -7,11 +7,7 @@ artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 compression: maximum
 npmRebuild: true
 nodeGypRebuild: false
-extraResources:
-  - from: "node_modules/ffmpeg-static/bin/${platform}/${arch}/"
-    to: ""
-    filter:
-      - "**/*"
+
 files:
   - "**/*"
   - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}"
@@ -33,6 +29,9 @@ mac:
   icon: "build/icons/mac/icon.icns"
   category: "public.app-category.entertainment"
   identity: null
+  extraResources:
+    - from: "node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg"
+      to: ""
   target:
     - dmg
 dmg:
@@ -53,12 +52,18 @@ linux:
   packageCategory: "GNOME;GTK;Music;AudioVideo"
   description: "Youtube downloader app"
   maintainer: "Radiium <remip.dev@gmail.com>"
+  extraResources:
+    - from: "node_modules/ffmpeg-static/bin/linux/x64/ffmpeg"
+      to: ""
   target:
     - deb
     - rpm
 
 win:
   icon: "build/icons/win/icon.ico"
+  extraResources:
+    - from: "node_modules/ffmpeg-static/bin/win32/x64/ffmpeg.exe"
+      to: ""
   target:
     - nsis
 nsis:
