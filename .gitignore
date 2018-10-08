@@ -1,19 +1,21 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# private conf
+/src/app/_core/services/api-key.json
+/build/psd
+
 # compiled output
 /dist
 /tmp
 /out-tsc
-/build/psd
-
-/trash
+/app-builds
+/release
+main.js
+src/**/*.js
+*.js.map
 
 # dependencies
 /node_modules
-
-# private conf
-/src/app/_core/services/api-key.json
-
 
 # IDEs and editors
 /.idea
@@ -24,20 +26,12 @@
 .settings/
 *.sublime-workspace
 
-# Release folder
-/release/*
-# !/release/*.Appimage
-# !/release/*.deb
-# !/release/*.dmg
-# !/release/*.Appimage
-# !/release/*.exe
-
 # IDE - VSCode
-.vscode
-# !.vscode/settings.json
-# !.vscode/tasks.json
-# !.vscode/launch.json
-# !.vscode/extensions.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # misc
 /.sass-cache
@@ -47,10 +41,11 @@
 npm-debug.log
 testem.log
 /typings
-yarn-error.log
+package-lock.json
 
 # e2e
 /e2e/*.js
+!/e2e/protractor.conf.js
 /e2e/*.map
 
 # System Files
