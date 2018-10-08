@@ -1,6 +1,16 @@
 ![Youdle logo](/build/icons/png/64x64.png)
 # Youdle
-## A simple Youtube mp3 downloader app
+Youdle is a desktop application (Win/Mac/Linux) to download and convert YouTube video to mp3.
+
+## features
+- Retrieve video(s) datas from youtube video/playlist url
+- Choose what videos you want donload and convert
+- Choose where save files
+- Choose the number of simultaneous downloads (for playlist)
+
+## Release
+
+Download last Release [here](https://github.com/radiium/youdle/releases)
 
 ## Screenshot:
 
@@ -8,22 +18,16 @@
 ![Youdle capture 2](/build/captures/youdle2.png?raw=true "Youdle capture 2")
 ![Youdle capture 3](/build/captures/youdle3.png?raw=true "Youdle capture 3")
 
-
 ## Development:
 
 ```bash
-# Run in browser at 'http://localhost:4200' (*Electron features not available in this mode*)
-ng serve
-
-# Run in electron
-npm run electron:dev
-
 # Run in electron with live reload
-npm run start:electron:reload
+npm run start
 
-# Package for: windows, ubuntu/debian and mac os
-npm run prepare:prod
-npm run dist
+# Build app for each platform
+npm run electron:linux
+npm run electron:mac
+npm run electron:windows
 ```
 
 
