@@ -29,7 +29,8 @@ export class UtilsService {
         });
 
         // Dev sample youtube url
-        if (isDevMode) {
+
+        if (isDevMode()) {
             // this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
             this.parseInputValue('https://www.youtube.com/watch?list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj');
         }
