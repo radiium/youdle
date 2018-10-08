@@ -79,6 +79,7 @@
     "del": "^3.0.0",
     "electron": "^3.0.3",
     "electron-builder": "^20.28.4",
+    "electron-icon-maker": "0.0.4",
     "electron-reload": "^1.2.5",
     "ffmpeg-static": "^2.3.0",
     "gulp": "github:gulpjs/gulp#4.0",
