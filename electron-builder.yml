@@ -1,13 +1,11 @@
 appId: com.radiium.youdle
 copyright: "LICENSE MIT"
 productName: youdle
-# forceCodeSigning: true
 asar: true
 artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 compression: maximum
 npmRebuild: true
 nodeGypRebuild: false
-
 files:
   - "**/*"
   - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}"
@@ -17,9 +15,6 @@ files:
   - "!**/._*"
   - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}"
   - "!**/node_modules/search-index/si${/*}"
-  # - "node_modules/ffmpeg-static/"
-  # - "!**/node_modules/.bin"
-
 directories:
   app: "dist"
   output: "release"
