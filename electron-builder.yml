@@ -45,7 +45,7 @@ linux:
   icon: "build/icons/png/"
   category: "GNOME;GTK;Music;AudioVideo"
   packageCategory: "GNOME;GTK;Music;AudioVideo"
-  description: "Youtube mp3 downloader app"
+  description: "Desktop Youtube mp3 downloader"
   maintainer: "Radiium <remip.dev@gmail.com>"
   extraResources:
     - from: "node_modules/ffmpeg-static/bin/linux/x64/ffmpeg"

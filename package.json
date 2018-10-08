@@ -2,7 +2,7 @@
   "name": "youdle",
   "version": "1.0.0-beta",
   "license": "MIT",
-  "description": "Youtube mp3 downloader app",
+  "description": "Desktop Youtube mp3 downloader",
   "homepage": "https://github.com/radiium/youdle",
   "repository": {
     "type": "git",
