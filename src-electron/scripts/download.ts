@@ -54,7 +54,7 @@ export function initDownload(isDev) {
 function setFfmpegPath(isDev) {
     let ffmpegPath = '';
     const platform = os.platform();
-    const arch = os.arch();
+    const arch = 'x64'; // os.arch();
     const ffmpegName = (platform === 'win32') ? 'ffmpeg.exe' : 'ffmpeg';
 
     if (isDev) {
