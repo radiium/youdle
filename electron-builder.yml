@@ -19,7 +19,6 @@ directories:
   app: "dist"
   output: "release"
   buildResources: "build"
-
 mac:
   icon: "build/icons/mac/icon.icns"
   category: "public.app-category.entertainment"
@@ -40,7 +39,6 @@ dmg:
     - x: 281
       y: 249
       type: file
-
 linux:
   icon: "build/icons/png/"
   category: "GNOME;GTK;Music;AudioVideo"
@@ -53,7 +51,6 @@ linux:
   target:
     - deb
     - rpm
-
 win:
   icon: "build/icons/win/icon.ico"
   extraResources:
