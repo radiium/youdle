@@ -1,6 +1,12 @@
 # ![Youdle logo](https://github.com/radiium/youdle/blob/master/build/icons/linux/48x48.png) youdle
 
-> Youtube to mp3 downloader
+> A simple Youtube mp3 downloader app
+
+## Screenshot:
+
+![Youdle capture 1](/build/captures/youdle1.png?raw=true "Youdle capture 1")
+![Youdle capture 2](/build/captures/youdle2.png?raw=true "Youdle capture 2")
+![Youdle capture 3](/build/captures/youdle3.png?raw=true "Youdle capture 3")
 
 
 ## Development:
