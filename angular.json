@@ -7,12 +7,6 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
-      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -20,25 +14,35 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
             "assets": [
-              "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "dev": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.dev.ts"
                 }
-              ],
+              ]
+            },
+            "production": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -47,7 +51,13 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
             }
           }
         },
@@ -57,6 +67,9 @@
             "browserTarget": "youdle:build"
           },
           "configurations": {
+            "dev": {
+              "browserTarget": "youdle:build:dev"
+            },
             "production": {
               "browserTarget": "youdle:build:production"
             }
@@ -72,16 +85,15 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": "src/polyfills-test.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles/styles.scss"
-            ],
             "scripts": [],
+            "styles": [
+              "src/styles.scss"
+            ],
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/assets",
             ]
           }
         },
@@ -100,7 +112,7 @@
       }
     },
     "youdle-e2e": {
-      "root": "e2e/",
+      "root": "e2e",
       "projectType": "application",
       "architect": {
         "e2e": {
@@ -108,17 +120,14 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "youdle:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "youdle:serve:production"
-            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]
@@ -127,5 +136,14 @@
       }
     }
   },
-  "defaultProject": "youdle"
+  "defaultProject": "youdle",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "styleext": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
 }
