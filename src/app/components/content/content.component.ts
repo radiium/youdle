@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { ElectronService } from 'ngx-electron';
 import { DataService } from 'core/services/data.service';
 import { UtilsService } from 'core/services/utils.service';
-import { AppState, Settings, Message, Search, Item, MessageType, ProgressStatus } from 'core/services/data.models';
+import { AppState, Settings, Search, Item, ProgressStatus, Message, MessageType } from 'core/services/data.models';
 
 
 @Component({
@@ -14,11 +14,10 @@ import { AppState, Settings, Message, Search, Item, MessageType, ProgressStatus 
     styleUrls: ['./content.component.scss']
 })
 export class ContentComponent implements OnInit {
-    messageType = MessageType;
+
     appState: AppState;
     settings: Settings;
     search: Search;
-    message: Message;
 
     downloaded: Item[];
     toDownload: Item[];
@@ -51,10 +50,6 @@ export class ContentComponent implements OnInit {
 
         this.dataSrv.settings$.subscribe((data) => {
             this.settings = data;
-        });
-
-        this.dataSrv.message$.subscribe((data) => {
-            this.message = data;
         });
 
         this.dataSrv.search$.subscribe((data) => {
@@ -168,13 +163,8 @@ export class ContentComponent implements OnInit {
     }
 
     setVideoStatus(id, status, progress?) {
-
         const idx = _.findIndex(this.search.items, { id: id });
-
         if (this.search.items[idx]) {
-            // console.log('setVideoStatus', status);
-            // console.log('item', this.search.items[idx]);
-
             this.search.items[idx].status = status;
             this.search.items[idx].progress = progress;
             this.dataSrv.setItems(this.search.items);
@@ -196,7 +186,7 @@ export class ContentComponent implements OnInit {
             this.electronSrv.ipcRenderer.send('download', data);
 
         } else {
-            this.dataSrv.setDownloadStarted(false);
+            // this.dataSrv.setDownloadStarted(false);
         }
     }
 
@@ -217,6 +207,7 @@ export class ContentComponent implements OnInit {
         };
         this.update(message);
         this.notify(message);
+        this.dataSrv.setDownloadStarted(false);
     }
 
     onAllDownloadError() {
