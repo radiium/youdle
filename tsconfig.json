@@ -19,11 +19,14 @@
     ],
     "baseUrl": "src",
     "paths": {
-      "shared/*": [ "app/_shared/*" ],
-      "core/*": [ "app/_core/*" ]
+      "@env/*": [ "environments/*" ],
+      "@core/*": [ "app/core/*" ],
+      "@stores/*": [ "app/core/stores/*" ],
+      "@shared/*": [ "app/shared/*" ],
+      "@shell/*": [ "app/shell/*" ],
+      "@app/*": [ "app/*" ]
     }
   },
-
   "include": [
     "main.ts",
     "src/**/*"

@@ -6,19 +6,22 @@ artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 compression: maximum
 npmRebuild: true
 nodeGypRebuild: false
-files:
-  - "**/*"
-  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}"
-  - "!postinstall.js"
-  - "!postinstall-web.js"
-  - "!**/*.{o,hprof,orig,pyc,pyo,rbc}"
-  - "!**/._*"
-  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}"
-  - "!**/node_modules/search-index/si${/*}"
+publish: null
+
 directories:
   app: "dist"
   output: "release"
   buildResources: "build"
+
+files:
+  - "**/*"
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}"
+  - "!**/*.{o,hprof,orig,pyc,pyo,rbc}"
+  - "!**/._*"
+  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}"
+  - "!**/node_modules/search-index/si${/*}"
+
+# Mac packaging
 mac:
   icon: "build/icons/mac/icon.icns"
   category: "public.app-category.entertainment"
@@ -39,6 +42,8 @@ dmg:
     - x: 281
       y: 249
       type: file
+
+# Linux packaging
 linux:
   icon: "build/icons/png/"
   category: "GNOME;GTK;Music;AudioVideo"
@@ -51,6 +56,8 @@ linux:
   target:
     - deb
     - rpm
+
+# Windows packaging
 win:
   icon: "build/icons/win/icon.ico"
   extraResources:
@@ -58,6 +65,10 @@ win:
       to: ""
   target:
     - nsis
+    - portable
 nsis:
   oneClick: true
   perMachine: true
+portable:
+  artifactName: "${productName}-${os}-${arch}-${version}_portable.${ext}"
+

@@ -4,6 +4,8 @@
 /src/app/_core/services/api-key.json
 /build/psd
 
+/src/environments/creds.json
+
 # compiled output
 /dist
 /tmp
