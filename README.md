@@ -22,18 +22,19 @@ Download last Release [here](https://github.com/radiium/youdle/releases)
 
 ```bash
 # Run in electron with live reload
-npm run start
+npm start
+
+# Build app for your current platform
+npm run release
 
 # Build app for each platform
-npm run electron:linux
-npm run electron:mac
-npm run electron:windows
+npm run release:all
 ```
 
 
 ## Made with
 
-- [angular 6](https://angular.io/) and [angular-cli](https://github.com/angular/angular-cli)
+- [angular 7](https://angular.io/) and [angular-cli](https://github.com/angular/angular-cli)
 - [angular material](https://material.angular.io/)
 - [electron](https://electron.atom.io/), [electron builder](https://github.com/electron-userland/electron-builder/) and [ngx-electron](https://github.com/ThorstenHans/ngx-electron)
 - [RxJS](http://reactivex.io/rxjs/)
@@ -41,8 +42,6 @@ npm run electron:windows
 - [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
 - [ffmpeg-static](https://github.com/zimbatm/ffmpeg-static)
 - [material design icons](https://materialdesignicons.com/)
-- [lodash](https://lodash.com/)
-- [moment](https://momentjs.com/)
 
 
 ## License
