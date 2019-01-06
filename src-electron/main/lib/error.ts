@@ -1,5 +1,4 @@
-
-export function handleError(error, sender, data?) {
+export default function handleError(error, sender, data?) {
     if (error) {
         const errorResp = {
             error: error,
