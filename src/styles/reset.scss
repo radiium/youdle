@@ -1,0 +1,42 @@
+*:not(.mat-dialog-container) {
+    font-family: 'Open sans';
+    box-sizing: border-box;
+    outline: none;
+    &:not(input) {
+        user-select: none;
+    }
+}
+
+html,
+body {
+    cursor: default;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+input,
+select {
+  vertical-align: middle;
+}
+
+input,
+select,
+textarea {
+    border: 0;
+    margin: 0;
+}
+
+button,
+input[type='button'],
+input[type='submit'] {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    &:focus { outline: none;}
+}

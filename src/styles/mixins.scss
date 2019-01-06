@@ -1,0 +1,11 @@
+@mixin appBackground() {
+    background: #aa4b6b;
+    background: -webkit-linear-gradient(to top, #aa4b6b, #6b6b83, #3b8d99);
+    background: linear-gradient(to top, #aa4b6b, #6b6b83, #3b8d99);
+}
+
+@mixin appBackgroundReverse() {
+    background: #3b8d99;
+    background: -webkit-linear-gradient(to top, #3b8d99, #6b6b83, #aa4b6b);
+    background: linear-gradient(to top, #3b8d99, #6b6b83, #aa4b6b);
+}
