@@ -1,0 +1,35 @@
+<div class="shellWrapper">
+
+    <!-- Header toolbar -->
+    <mat-toolbar class="header">
+
+        <!-- Search input -->
+        <input class="inputBar" type="text" #inputBar
+            [disabled]="appState.isDownloading"
+            [class.disableInputBar]="appState.isDownloading"
+            (focus)="$event.target.select()"
+            [class.clearable]="searchState.inputValue !== ''"
+            placeholder="Paste video or playlist url or id.."
+            [ngModel]="searchState.inputValue"
+            (ngModelChange)="onInputChange($event)"
+            [ngModelOptions]="{standalone: true}">
+
+        <!-- Clear input button -->
+        <button class="clearBtn" *ngIf="inputBar.value" (click)="clearInput()"
+            [disabled]="appState.isDownloading"
+            [class.disabledClearBtn]="true || appState.isDownloading">
+            <mat-icon class="clearBtnIco" svgIcon="close"></mat-icon>
+        </button>
+
+        <!-- Open settings button -->
+        <button class="iconBtn" (click)="openSettingsDialog()"
+            [disabled]="appState.isDownloading"
+            [class.controlDisabled]="appState.isDownloading">
+            <mat-icon svgIcon="settings"></mat-icon>
+        </button>
+    </mat-toolbar>
+
+    <!-- Video list -->
+    <app-video-list></app-video-list>
+
+</div>

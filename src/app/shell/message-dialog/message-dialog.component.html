@@ -1,0 +1,27 @@
+<div class="dialogContainer">
+
+    <!-- Dialog header -->
+    <mat-toolbar class="dialogHeader">
+        <div class="textBar flexSpacer">Message</div>
+        <button class="iconBtn" [mat-dialog-close]="true">
+            <mat-icon svgIcon="check"></mat-icon>
+        </button>
+    </mat-toolbar>
+
+    <!-- Dialog content -->
+    <div mat-dialog-content>
+
+        <!-- Message -->
+        <div class="messageBox" *ngIf="messageState">
+            <div class="messageTitle messageItem" *ngIf="messageState.title">{{ messageState.title }}</div>
+            <div class="messageIcon messageItem">
+                <img src="assets/icons/checked.svg" *ngIf="messageState.type === 'SUCCESS'">
+                <img src="assets/icons/cancel.svg" *ngIf="messageState.type !== 'SUCCESS'">
+                <!--
+                    *ngIf="message.type === 'ERROR' || message.type === 'CANCEL'"
+                -->
+            </div>
+            <div class="messageDesc messageItem" *ngIf="messageState.description">{{ messageState.description }}</div>
+        </div>
+    </div>
+</div>

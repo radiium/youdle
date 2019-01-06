@@ -1,0 +1,75 @@
+.dialogContainer {
+
+    .labelRow {
+        width: 100%;
+        font-size: 1.2rem;
+        color: #E4E4E4;
+        margin: 0 0 5px 0;
+        &.otherRow{
+            margin-top: 35px;
+        }
+    }
+
+    .settingsRow {
+        display: flex;
+
+        .settingsInputWrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #E4E4E4;
+            cursor: pointer;
+            padding-right: 10px;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .concurrentDownloadInputWrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #E4E4E4;
+
+            .settingsBtn {
+                width: 34px;
+                height: 34px;
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            }
+        }
+
+        .settingsInput {
+            font-size: 1.2rem;
+            padding: 4px 15px 3px 15px;//0 8px 0 8px;
+            max-width: 100%;
+            display: flex;
+            word-break: break-all;
+            align-self: center;
+
+            &.settingsInputConcDl {
+                width: 60px;
+                justify-content: center;
+            }
+
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+            }
+        }
+
+        .settingsBtn {
+            color: #E4E4E4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            align-self: center;
+        }
+
+    }
+}

@@ -1,0 +1,33 @@
+.dialogContainer {
+
+    .messageBox {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .messageTitle {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .messageIcon {
+            text-align: center;
+
+            img {
+                width: 100px;
+            }
+        }
+
+        .messageDesc {
+            font-size: 1.3rem;
+            text-align: center;
+            color: white;
+        }
+
+        .messageItem {
+            margin-bottom: 20px;
+        }
+    }
+}

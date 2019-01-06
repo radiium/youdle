@@ -1,0 +1,131 @@
+<div class="videoListContainer">
+
+    <!-- Toolbar -->
+    <div class="videoListToolbar">
+
+        <div class="loader" *ngIf="appState.isSearching">
+            <app-loader></app-loader>
+        </div>
+
+        <div class="noResultMsg" *ngIf="dataSource.data.length === 0 && searchState.inputValue !== '' && !appState.isSearching">
+            <div>Nothing found...</div>
+        </div>
+
+        <div class="toolbarControl" *ngIf="dataSource.data.length > 0 && !appState.isSearching"
+            [class.borderToolBar]="dataSource.data.length > 0">
+
+            <mat-checkbox class="masterSelect" *ngIf="dataSource.data.length > 1"
+                (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                [disabled]="appState.isDownloading"
+                [color]="'primary'">
+            </mat-checkbox>
+
+            <div class="counter" *ngIf="dataSource.data.length > 0">
+                <span *ngIf="dataSource.data.length > 1">{{ selection.selected.length }}/</span>
+                <span>{{ dataSource.data.length }} </span>
+                <span> Track</span>
+                <span *ngIf="selection.selected.length > 1">s</span>
+            </div>
+
+            <div class="flexSpacer" *ngIf="dataSource.data.length > 0"></div>
+
+            <button class="control" mat-button
+                *ngIf="(dataSource.data.length > 0) && !appState.isDownloading"
+                [class.anim]="selection.selected.length > 0"
+                [disabled]="selection.selected.length === 0"
+                [class.controlDisabled]="selection.selected.length === 0"
+                (click)="startDownload()">
+                <mat-icon class="controlIcon" svgIcon="cloud-download"></mat-icon>
+                <span class="controlText">Download</span>
+            </button>
+
+            <button class="control" mat-button
+                *ngIf="appState.isDownloading"
+                [class.anim]="selection.selected.length > 0"
+                [class.controlDisabled]="selection.selected.length === 0"
+                (click)="cancelDownload()">
+                <mat-icon class="controlIcon" svgIcon="close-octagon-outline"></mat-icon>
+                <span class="controlText">Cancel</span>
+            </button>
+        </div>
+    </div>
+
+    <mat-table [dataSource]="dataSource" class="superTable">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="selected">
+            <mat-cell *matCellDef="let row; let element" class="selected">
+                <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="itemToggle(row, $event)"
+                    [checked]="selection.isSelected(row) || element.status !== 'NONE'"
+                    [disabled]="appState.isDownloading"
+                    [color]="'primary'">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Thumbnail Column -->
+        <ng-container matColumnDef="thumbnail">
+            <mat-cell *matCellDef="let element">
+                <div class="thumbnail">
+
+                    <div class="progress" *ngIf="element.status !== 'NONE' && element.progress">
+                        <mat-progress-spinner class="miniSpinner"
+                            [color]="primary"
+                            [mode]="'determinate'"
+                            [value]="element.progress.percent">
+                        </mat-progress-spinner>
+                        <div class="progressText">{{ element.progress.percent }}%</div>
+                    </div>
+
+                    <div class="progress" *ngIf="element.status !== 'NONE' && element.status !== 'ENDED'">
+                        <mat-progress-spinner class="miniSpinner" *ngIf="element.progress"
+                            [color]="primary" [mode]="'determinate'" [value]="element.progress.percent">
+                        </mat-progress-spinner>
+                        <div *ngIf="element.progress" class="progressText">{{ element.progress.percent }}%</div>
+                    </div>
+                    <!--
+                        <div class="progress" *ngIf="true || element.status === 'PROGRESS' && element.progress">
+                            <mat-progress-spinner class="miniSpinner"
+                                [color]="primary"
+                                [mode]="'determinate'"
+                                [value]="62.27">
+                            </mat-progress-spinner>
+                            <div class="progressText">{{ 62.27 }}%</div>
+                        </div>
+                    -->
+
+                    <img [src]="element.thumb" alt=""
+                        [class.hidded]="element.status !== 'NONE' && element.progress">
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Meta Column -->
+        <ng-container matColumnDef="meta">
+            <mat-cell *matCellDef="let element">
+                <div class="duration">{{ element.duration | duration }}</div>
+                <div class="publishedAt">{{ element.publishedAt | date : 'mediumDate' : 'fr-FR' }}</div>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+            <mat-cell *matCellDef="let element" class="title">
+                <div class="infos flexSpacer">
+                    <div class="title">{{ element.title }}</div>
+                    <div class="channelTitle">{{ element.channelTitle }}</div>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Table config -->
+        <mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="itemToggle(row, $event)">
+        </mat-row>
+    </mat-table>
+
+</div>

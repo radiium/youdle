@@ -1,0 +1,45 @@
+<div class="dialogContainer">
+
+    <!-- Dialog header -->
+    <mat-toolbar class="dialogHeader">
+        <div class="textBar flexSpacer">Settings</div>
+        <button class="iconBtn" [mat-dialog-close]="true">
+            <mat-icon svgIcon="check"></mat-icon>
+        </button>
+    </mat-toolbar>
+
+    <!-- Dialog content -->
+    <div mat-dialog-content>
+        <div class="dialogContent">
+
+            <!-- Set Save path -->
+            <div class="labelRow">save as:</div>
+            <div class="settingsRow">
+                <div class="settingsInputWrapper" (click)="editSavePath()">
+                    <div class="settingsInput">{{ settingsState.savePath }}</div>
+                    <button class="settingsBtn">
+                        <mat-icon svgIcon="pencil"></mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Set Concurrent download -->
+            <div class="labelRow otherRow">Simultaneous download:</div>
+            <div class="settingsRow">
+                <div class="concurrentDownloadInputWrapper">
+                    <button class="settingsBtn" (click)="decrement()">
+                        <mat-icon svgIcon="minus-circle-outline"></mat-icon>
+                    </button>
+                    <div class="settingsInput settingsInputConcDl" type="number">
+                        {{ settingsState.concurrentDownload }}
+                    </div>
+                    <button class="settingsBtn" (click)="increment()">
+                        <mat-icon svgIcon="plus-circle-outline"></mat-icon>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

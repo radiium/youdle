@@ -1,0 +1,230 @@
+.videoListContainer {
+    width: 100%;
+    height: calc(100% - 64px);
+
+
+
+    .videoListToolbar {
+        width: 100%;
+        height: 50px;
+
+    }
+
+    .videoListContent {
+        overflow: auto;
+        height: calc(100% - 50px);
+    }
+
+
+
+
+    .loader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .noResultMsg {
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .toolbarControl {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: 100%;
+        height: 100%;
+
+        &.borderToolBar {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .masterSelect {
+            align-self: center;
+            margin-left: 24px;
+        }
+
+        .counter {
+            align-self: center;
+            font-size: 1.2rem;
+            margin-left: 24px;
+        }
+
+        .control {
+            align-self: center;
+            color: white !important;
+            margin-right: 10px;
+            transition: opacity ease 100ms;
+
+            &.anim {
+                animation: bounce 1s;
+            }
+
+            &.controlDisabled {
+                opacity: 0.8;
+            }
+
+            .controlIcon {
+                margin-right: 10px;
+            }
+
+            .controlText {
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+
+    .superTable {
+        width: 100%;
+        background: transparent;
+        max-height: calc(100% - 50px);
+        overflow: auto;
+
+        .mat-row {
+            height: 80px;
+
+            &:nth-child(even){ background-color: rgba(0, 0, 0, 0.2); }
+            .mat-cell { color: white; }
+        }
+
+        .mat-column-selected {
+            max-width: 60px;
+
+            .selected {
+            }
+        }
+
+        .mat-column-thumbnail {
+            max-width: 80px;
+            justify-content: center;
+            position: relative;
+
+            .progress {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                height: 70px;
+                width: 70px;
+                max-height: 70px;
+                max-width: 70px;
+                z-index: 9;
+            }
+
+            .progressText {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                margin-top: 35%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                align-content: center;
+            }
+
+            .thumbnail {
+                align-self: center;
+                height: 70px;
+                width: 70px;
+                display: flex;
+                flex-direction: column;
+                box-sizing: content-box;
+                position: relative;
+
+                img {
+                    object-fit: cover;
+                    height: 70px;
+                    border-radius: 50%;
+
+                    &.hidded {
+                        opacity: 0.8;
+                    }
+                }
+
+                .progressDetail {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: -4px;
+                    height: 100%;
+                    text-align: center;
+
+                    // .detailTitle {}
+                    .detailNbr {
+                        font-size: 0.8rem;
+                    }
+                }
+            }
+        }
+
+        .mat-column-meta {
+            max-width: 110px;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+
+            .duration {
+                border: 1px solid white;
+                padding: 0 2px 0 3px;
+                font-weight: bold;
+                align-self: center;
+                font-size: 0.7rem;
+            }
+
+            .publishedAt {
+                font-weight: bold;
+                align-self: center;
+                font-size: 0.8rem;
+            }
+        }
+
+        .mat-column-title {
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+
+            .infos {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                .title {
+                    font-size: 0.9rem;
+                }
+                .channelTitle {
+                    font-size: 0.8rem;
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+
+}
+
+@keyframes bounce {
+	0%, 20%, 60%, 100% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+	}
+
+	40% {
+		-webkit-transform: translateY(-10px);
+		transform: translateY(-10px);
+	}
+
+	80% {
+		-webkit-transform: translateY(-5px);
+		transform: translateY(-5px);
+	}
+}
