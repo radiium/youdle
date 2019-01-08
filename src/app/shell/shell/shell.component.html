@@ -17,7 +17,7 @@
         <!-- Clear input button -->
         <button class="clearBtn" *ngIf="inputBar.value" (click)="clearInput()"
             [disabled]="appState.isDownloading"
-            [class.disabledClearBtn]="true || appState.isDownloading">
+            [class.disabledClearBtn]="appState.isDownloading">
             <mat-icon class="clearBtnIco" svgIcon="close"></mat-icon>
         </button>
 
