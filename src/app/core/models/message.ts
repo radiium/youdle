@@ -1,7 +1,7 @@
-import { MessageType } from './message-type';
-
 export interface Message {
-    type: MessageType;
-    title: string;
-    description: string;
+    title?: string;
+    successCount?: number;
+    cancelCount?: number;
+    errorCount?: number;
+    error?: any;
 }
