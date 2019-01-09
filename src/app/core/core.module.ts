@@ -8,6 +8,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { ElectronDownloadService } from '@core/services/electron/electron-download.service';
 import { ElectronSavePathService } from '@core/services/electron/electron-save-path.service';
 import { ElectronStorageService } from '@core/services/electron/electron-storage.service';
+import { DownloadService } from '@core/services/download.service';
 
 const SERVICES = [
     ApiService,
@@ -17,7 +18,8 @@ const SERVICES = [
     UtilsService,
     ElectronDownloadService,
     ElectronSavePathService,
-    ElectronStorageService
+    ElectronStorageService,
+    DownloadService
 ];
 
 @NgModule({
