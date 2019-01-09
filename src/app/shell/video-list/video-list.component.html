@@ -19,7 +19,8 @@
                 [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()"
                 [disabled]="appState.isDownloading"
-                [color]="'primary'">
+                [color]="'primary'"
+                >
             </mat-checkbox>
 
             <div class="counter" *ngIf="dataSource.data.length > 0">
@@ -60,9 +61,10 @@
                 <mat-checkbox
                     (click)="$event.stopPropagation()"
                     (change)="itemToggle(row, $event)"
-                    [checked]="selection.isSelected(row) || element.status !== 'NONE'"
-                    [disabled]="appState.isDownloading"
-                    [color]="'primary'">
+                    [checked]="selection.isSelected(row) || element.status !== 'NONE' || dataSource.data.length === 1"
+                    [disabled]="appState.isDownloading || dataSource.data.length === 1"
+                    [color]="'primary'"
+                    >
                 </mat-checkbox>
             </mat-cell>
         </ng-container>
@@ -81,7 +83,7 @@
                         <div class="progressText">{{ element.progress.percent }}%</div>
                     </div>
 
-                    <div class="progress" *ngIf="element.status !== 'NONE' && element.status !== 'ENDED'">
+                    <div class="progress" *ngIf="element.status !== 'NONE' && element.status !== 'SUCCESS'">
                         <mat-progress-spinner class="miniSpinner" *ngIf="element.progress"
                             [color]="primary" [mode]="'determinate'" [value]="element.progress.percent">
                         </mat-progress-spinner>
