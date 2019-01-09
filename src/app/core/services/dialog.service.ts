@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 
 import { SettingsDialogComponent } from '@shell/settings-dialog/settings-dialog.component';
 import { MessageDialogComponent } from '@shell/message-dialog/message-dialog.component';
+import { Message } from '@core/models';
 
 @Injectable({
     providedIn: 'root'
@@ -28,21 +29,21 @@ export class DialogService {
 
     // closeAll()
     openSettingsDialog() {
-        console.log('openSettingsDialog');
-        const dialog = this.dialog.open(SettingsDialogComponent, this.dialogConfig);
-        dialog.afterClosed().subscribe(result => {
-            // this.settingsdialogRef = null;
+        const dialogRef = this.dialog.open(SettingsDialogComponent, this.dialogConfig);
+        dialogRef.afterClosed().subscribe(result => {
             this.dialog.closeAll();
         });
     }
 
-    openMessageDialog(message) {
+    openMessageDialog(message: Message, callback?: Function) {
         console.log('openMessageDialog');
         this.dialogConfig.data.message = message;
-        const dialog = this.dialog.open(MessageDialogComponent, this.dialogConfig);
-        dialog.afterClosed().subscribe(result => {
-            // this.messagedialogRef = null;
+        const dialogRef = this.dialog.open(MessageDialogComponent, this.dialogConfig);
+        dialogRef.afterClosed().subscribe(result => {
             this.dialog.closeAll();
+            if (callback) {
+                callback();
+            }
         });
     }
 
