@@ -21,7 +21,7 @@ import {
     SettingsActionLoadSettingsState,
     SettingsActionSetSettingsState} from './settings.actions';
 
-import { SettingsState } from './settings.model';
+import { SettingsState, MediaType } from './settings.model';
 
 
 @Injectable()
@@ -39,14 +39,15 @@ export class SettingsEffects {
         ofType<SettingsActionLoadSettingsState>(SettingsActionTypes.LOAD_SETTINGS_STATE),
         switchMap((action) => {
             return this.storageSrv.getItem('settings').pipe(
-                map(settings => {
+                map((settings: SettingsState) => {
                     settings = settings[0];
 
                     if (_.isEmpty(settings)) {
                         this.savePathSrv.getDefaultSavePath().subscribe(savePath => {
                             const defaultSettings = {
                                 savePath: savePath[0],
-                                concurrentDownload: 3
+                                concurrentDownload: 3,
+                                mediaType: MediaType.AUDIO
                             } as SettingsState;
                             this.store$.dispatch(new SettingsActionSetSettingsState(defaultSettings));
                         });
@@ -82,6 +83,7 @@ export class SettingsEffects {
     electronStoreSettingsState$ = this.actions$.pipe(
         ofType(
             SettingsActionTypes.SET_SETTINGS_STATE,
+            SettingsActionTypes.SET_MEDIA_TYPE,
             SettingsActionTypes.SET_SAVE_PATH,
             SettingsActionTypes.SET_CONCURRENT_DL,
             SettingsActionTypes.INCREMENT_CONCURRENT_DL,

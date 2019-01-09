@@ -1,9 +1,10 @@
-import { SettingsState } from './settings.model';
+import { SettingsState, MediaType } from './settings.model';
 import { SettingsActions, SettingsActionTypes } from './settings.actions';
 
 export const initialState: SettingsState = {
     savePath: '',
-    concurrentDownload: 3
+    concurrentDownload: 3,
+    mediaType: MediaType.VIDEO
 };
 
 export function settingsReducer(
@@ -37,6 +38,9 @@ export function settingsReducer(
                 ...state,
                 concurrentDownload: decrementValue(state.concurrentDownload)
             };
+
+        case SettingsActionTypes.SET_MEDIA_TYPE:
+            return { ...state, mediaType: action.payload };
 
         case SettingsActionTypes.SET_SUCCESS:
             return state;

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { SettingsState } from './settings.model';
+import { SettingsState, MediaType } from './settings.model';
 
 export enum SettingsActionTypes {
     LOAD_SETTINGS_STATE = '[SETTINGS] LOAD_SETTINGS_STATE',
@@ -12,6 +12,8 @@ export enum SettingsActionTypes {
     SET_CONCURRENT_DL = '[SETTINGS] SET_CONCURRENT_DL',
     INCREMENT_CONCURRENT_DL = '[SETTINGS] INCREMENT_CONCURRENT_DL',
     DECREMENT_CONCURRENT_DL = '[SETTINGS] DECREMENT_CONCURRENT_DL',
+
+    SET_MEDIA_TYPE = '[SETTINGS] SET_MEDIA_TYPE',
 
     SET_SUCCESS = '[SETTINGS] SET_SUCCESS',
 }
@@ -51,6 +53,11 @@ export class SettingsActionDecrementConcurrentDl implements Action {
     constructor() {}
 }
 
+export class SettingsActionSetMediaType implements Action {
+    readonly type = SettingsActionTypes.SET_MEDIA_TYPE;
+    constructor(public payload: MediaType) {}
+}
+
 export class SettingsActionSetSuccess implements Action {
     readonly type = SettingsActionTypes.SET_SUCCESS;
     constructor() {}
@@ -64,4 +71,5 @@ export type SettingsActions =
     | SettingsActionSetConcurrentDl
     | SettingsActionIncrementConcurrentDl
     | SettingsActionDecrementConcurrentDl
+    | SettingsActionSetMediaType
     | SettingsActionSetSuccess;
