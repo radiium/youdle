@@ -23,21 +23,17 @@ import {
     VideoListActionCancelDownloadSuccess,
 
 } from './video-list.actions';
-import { selectItems } from './video-list.selectors';
 import { ApiService } from '@core/services/api.service';
-import { ElectronService } from '@core/services/electron.service';
+import { DownloadService } from '@core/services/download.service';
 
 @Injectable()
 export class VideoListEffects {
 
     constructor(
-    private electronSrv: ElectronService,
-    private apiSrv: ApiService,
+    private downloadSrv: DownloadService,
     private actions$: Actions<Action>,
     private store$: Store<any>) {
     }
-
-
 
 
     @Effect({ dispatch: false })
@@ -52,7 +48,7 @@ export class VideoListEffects {
 
             const selectedItems = data[1].selectedItems;
             const settings = data[2];
-            this.electronSrv.startDownload(selectedItems, settings);
+            this.downloadSrv.startDownloadVideo(selectedItems, settings);
 
             this.store$.dispatch(new VideoListActionStartDownloadSuccess());
             return EMPTY;
@@ -63,7 +59,7 @@ export class VideoListEffects {
     cancelDownload$ = this.actions$.pipe(
         ofType<VideoListActionCancelDownload>(VideoListActionTypes.CANCEL_DOWNLOAD),
         mergeMap(action => {
-            this.electronSrv.cancelDownload();
+            this.downloadSrv.cancelDownload();
             this.store$.dispatch(new VideoListActionCancelDownloadSuccess());
             return EMPTY;
         })
@@ -75,8 +71,6 @@ export class VideoListEffects {
         ofType<VideoListActionUpdateItems>(VideoListActionTypes.UPDATE_ITEMS),
         withLatestFrom(this.store$.select('VideoListState')),
         map(data => {
-            console.log('updateItems', data);
-
             const items = _.cloneDeep(data[1].items);
             const selectedItems = _.cloneDeep(data[1].items);
             const toUpdateItems = data[0].payload;
