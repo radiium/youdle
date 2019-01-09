@@ -40,8 +40,8 @@ export class ElectronService {
                 } else {
                     obs.next(args);
                 }
-                obs.complete();
-                this.ipcRenderer.removeAllListeners(eventKey);
+                // obs.complete();
+                // this.ipcRenderer.removeAllListeners(eventKey);
             });
         });
     }
