@@ -9,6 +9,8 @@ import {
     AppStateActionUnsetIsDownloading } from '@core/stores/app-state';
 
 import { VideoListItem } from '@stores/video-list/video-list.model';
+import { selectItems, selectSelectedItems } from '@core/stores/video-list/video-list.selectors';
+
 import {
     VideoListActionSetSelectedItems,
     VideoListActionSetItems,
@@ -23,7 +25,7 @@ import {
     SearchActionClearInputValue,
     SearchActionSetInputValue} from '@stores/search/search.actions';
 
-import { SettingsState, } from '@stores/settings/settings.model';
+import { SettingsState, MediaType, } from '@stores/settings/settings.model';
 import {
     SettingsActionSetSettingsState,
     SettingsActionEditSavePath,
@@ -31,7 +33,8 @@ import {
     SettingsActionSetConcurrentDl,
     SettingsActionIncrementConcurrentDl,
     SettingsActionDecrementConcurrentDl,
-    SettingsActionLoadSettingsState} from '@core/stores/settings/settings.actions';
+    SettingsActionLoadSettingsState,
+    SettingsActionSetMediaType} from '@core/stores/settings/settings.actions';
 
 
 
@@ -68,6 +71,14 @@ export class ApiService {
     // VideoList state
     getVideoListState() {
         return this.store.select('VideoListState');
+    }
+
+    getItems() {
+        return this.store.select(selectItems);
+    }
+
+    getSelectedItems() {
+        return this.store.select(selectSelectedItems);
     }
 
     setItems(items: VideoListItem[]) {
@@ -147,5 +158,10 @@ export class ApiService {
 
     decrementConcurrentDownload() {
         this.store.dispatch(new SettingsActionDecrementConcurrentDl());
+    }
+
+    setMediaType(mediaType: MediaType) {
+        this.store.dispatch(new SettingsActionSetMediaType(mediaType));
+
     }
 }
