@@ -37,6 +37,8 @@ import {
 } from '@angular/material';
 
 const matModule = [
+    OverlayModule,
+
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -67,7 +69,6 @@ const matModule = [
     MatTooltipModule,
     MatBadgeModule,
     MatDividerModule,
-    OverlayModule,
 ];
 
 
