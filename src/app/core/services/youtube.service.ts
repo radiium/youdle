@@ -5,7 +5,6 @@ import { expand, pluck, scan, last, map, flatMap } from 'rxjs/operators';
 // import * as _ from 'lodash';
 
 import { environment } from '@env/environment';
-
 const PUBLIC_KEY = environment.publicKey;
 
 @Injectable()

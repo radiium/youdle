@@ -4,7 +4,7 @@ import { ElectronService } from './electron.service';
 
 export interface DownloadOptions {
     savePath: string;
-    container: MediaType;
+    type: MediaType;
 }
 
 export enum MediaType {
@@ -24,24 +24,14 @@ export class ElectronDownloadService extends ElectronService {
         this.ipcRenderer.send('start-download', video, options);
     }
 
-    public cancelDownloadVideo(video) {
+    public cancelDownloadVideo(videoId: string) {
         if (!this.isElectronApp) { return EMPTY; }
-        this.ipcRenderer.send('cancel-download.' + video.id);
+        this.ipcRenderer.send('cancel-download.' + videoId);
         return this.getResponseEvent('cancel-download-resp');
     }
 
-    public onDownloadStart() {
+    public onDownload() {
         if (!this.isElectronApp) { return EMPTY; }
-        return this.getResponseEvent('onDownloadStart');
-    }
-
-    public onDownloadProgress() {
-        if (!this.isElectronApp) { return EMPTY; }
-        return this.getResponseEvent('onDownloadProgress');
-    }
-
-    public onDownloadEnd() {
-        if (!this.isElectronApp) { return EMPTY; }
-        return this.getResponseEvent('onDownloadEnd');
+        return this.getResponseEvent('onDownload');
     }
 }
