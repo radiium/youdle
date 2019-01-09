@@ -4,7 +4,7 @@ import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxElectronModule } from 'ngx-electron';
 import { MatIconRegistry, MatIconModule } from '@angular/material';
 
@@ -24,8 +24,8 @@ const mdi = require('@mdi/angular-material/mdi.svg') as string;
         CommonModule,
         HttpClientModule,
         HttpClientJsonpModule,
-        NoopAnimationsModule,
-        // BrowserAnimationsModule,
+        // NoopAnimationsModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         NgxElectronModule,
@@ -34,8 +34,8 @@ const mdi = require('@mdi/angular-material/mdi.svg') as string;
     ],
     exports: [
         CommonModule,
-        NoopAnimationsModule,
-        // BrowserAnimationsModule,
+        // NoopAnimationsModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         NgxElectronModule,
