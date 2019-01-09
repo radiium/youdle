@@ -16,20 +16,16 @@ export interface VideoListItem {
     description: string;
     channelTitle: string;
 
-    status: ProgressStatus;
+    status: DownloadStatus;
     progress: Progress;
 }
 
-/*
-status: ProgressStatus;
-progress?: Progress;
-*/
-export enum ProgressStatus {
+export enum DownloadStatus {
     NONE = 'NONE',
-    STARTED = 'STARTED',
+    START = 'START',
     PROGRESS = 'PROGRESS',
-    ENDED = 'ENDED',
-    CANCELLED = 'CANCELLED',
+    SUCCESS = 'SUCCESS',
+    CANCEL = 'CANCEL',
     ERROR = 'ERROR'
 }
 
