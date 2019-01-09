@@ -2,19 +2,12 @@ import { Injectable, isDevMode } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { VideoListItem, ProgressStatus } from '@core/stores/video-list';
+import { VideoListItem, DownloadStatus } from '@core/stores/video-list';
 
 @Injectable()
 export class UtilsService {
 
-    constructor() {
-
-        // Dev sample youtube url
-        if (isDevMode()) {
-            // this.parseInputValue('https://www.youtube.com/watch?list=PL0k4GF1e6u1T9kUYx9ppyGvCS9EcvaCM2');
-            // this.parseInputValue('https://www.youtube.com/watch?list=PLMC9KNkIncKtPzgY-5rmhvj7fax8fdxoj');
-        }
-    }
+    constructor() { }
 
     validUrl(str) {
         return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(str);
@@ -55,7 +48,7 @@ export class UtilsService {
             thumb: data.snippet.thumbnails.default.url,
             duration: moment.duration(data.contentDetails.duration).asMilliseconds(),
             publishedAt: data.snippet.publishedAt,
-            status: ProgressStatus.NONE,
+            status: DownloadStatus.NONE,
             progress: null
         };
     }
