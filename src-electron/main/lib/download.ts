@@ -9,12 +9,9 @@ import * as os from 'os';
 import * as _ from 'lodash';
 
 import Logger from './logger';
-import { Readable } from 'stream';
-
 
 interface Item {
-    video?: any;
-    type: string;
+    video: any;
     OUTPUT?: string;
 }
 
@@ -23,10 +20,13 @@ interface Options {
     savePath: string;
 }
 
-enum EndType {
-    ERROR = 'ERROR',
+export enum DownloadStatus {
+    NONE = 'NONE',
+    START = 'START',
+    PROGRESS = 'PROGRESS',
     SUCCESS = 'SUCCESS',
     CANCEL = 'CANCEL',
+    ERROR = 'ERROR'
 }
 
 export default class Download extends Logger {
@@ -61,14 +61,15 @@ export default class Download extends Logger {
 
         const item: Item = {
             video: video,
-            type: options.type
         };
 
-        if (options.type === 'VIDEO') {
+        this.log('startDownload', options);
+
+        if (this.options.type === 'VIDEO') {
             item.OUTPUT = this.resolveOutput(options.savePath, video.title, '.mp4');
             this.createStream(item, { filter: (format) => format.container === 'mp4' });
 
-        } else if (options.type === 'audio') {
+        } else if (this.options.type === 'AUDIO') {
             item.OUTPUT = this.resolveOutput(options.savePath, video.title, '.mp3');
             this.createStream(item, { quality: 'highestaudio' });
         }
@@ -77,12 +78,13 @@ export default class Download extends Logger {
 
     private createStream(item: Item, ytdlOptions: any) {
 
-        const end = (type: EndType, err?: any) => {
-            this.log(`[END_${type}] => ${item.video.id}`);
+        const onDownload = (type: DownloadStatus, progress: any, err?: any) => {
+            this.log(`[${type}] => ${item.video.id}`, progress, err);
             this.removeItems(item);
-            this.mainWindow.webContents.send('onDownloadEnd', {
-                id: item.video.id,
-                type: type,
+            this.mainWindow.webContents.send('onDownload', err, {
+                item: item.video,
+                status: type,
+                progress: progress,
                 error: err
             });
         };
@@ -105,7 +107,7 @@ export default class Download extends Logger {
 
         const onError = (err: any) => {
             cancel();
-            end(EndType.ERROR, err);
+            onDownload(DownloadStatus.ERROR, null, err);
         };
 
         /// Download (ytdl-core)
@@ -113,52 +115,48 @@ export default class Download extends Logger {
         // Download events
         let startDL: number;
         const onceDownloadResponse = (response: any) => {
-            this.log(`[DOWNLOAD_START] => ${item.video.id}`);
             startDL = Date.now();
             this.startedItems.push(item);
-            this.mainWindow.webContents.send('onDownloadStart', { id: item.video.id });
+            onDownload(DownloadStatus.START, null, null);
         };
 
         const onDownloadProgress = (chunkLength: number, downloaded: number, total: number) => {
-            this.log(`[DOWNLOAD_PROGRESS] => ${item.video.id}`);
-            const data = this.computeProgress(downloaded, total, startDL, item.video.id);
-            this.mainWindow.webContents.send('onDownloadProgress', data);
+            const progress = this.computeProgress(downloaded, total, startDL);
+            onDownload(DownloadStatus.PROGRESS, progress, null);
         };
 
-
-
         const readStream = ytdl(item.video.id, ytdlOptions)
-            .pipe(fs.createWriteStream(item.OUTPUT + '.crdownload'))
             .once('response', onceDownloadResponse.bind(this))
             .on('progress', onDownloadProgress.bind(this))
-            .on('error', onError.bind(this));
+            .on('error', onError.bind(this))
+            .on('finish', () => {
+                const onConvertEnd = () => {
+                    this.log(`[CONVERT_END] => video: ${item.video.id}`);
+                    onDownload(DownloadStatus.SUCCESS, null, null);
+                };
 
+                if (this.options.type === 'VIDEO') {
+                    ffmpegCmd = this.convertToMp4(item);
+
+                } else if (this.options.type === 'AUDIO') {
+                    ffmpegCmd = this.convertToMp3(item);
+                }
+
+                ffmpegCmd
+                    .on('error', onError.bind(this))
+                    .on('end', onConvertEnd.bind(this));
+            })
+            .pipe(fs.createWriteStream(item.OUTPUT + '.crdownload'));
 
         /// Convert (fluent-ffmpeg)
 
         // Convert events
 
-        const onConvertEnd = () => {
-            this.log(`[CONVERT_END] => video: ${item.video.id}`);
-            end(EndType.SUCCESS);
-        };
-
         let ffmpegCmd: any;
-        if (item.type === 'VIDEO') {
-            ffmpegCmd = this.convertToMp4(item);
-
-        } else if (item.type === 'AUDIO') {
-            ffmpegCmd = this.convertToMp3(item);
-        }
-
-        ffmpegCmd
-            .on('error', onError.bind(this))
-            .on('end', onConvertEnd.bind(this));
-
 
         ipcMain.on('cancelDownload.' + item.video.id, (evt, arg) => {
             cancel();
-            end(EndType.CANCEL);
+            onDownload(DownloadStatus.CANCEL, null, null);
         });
     }
 
@@ -186,114 +184,16 @@ export default class Download extends Logger {
         });
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    download(event: any, arg: any) {
-        this.createStream2(event, arg.video, arg.savePath);
-    }
-
-
-
-
-    createStream2(event: any, video: any, savePath: string) {
-
-        let startDL;
-        const fileName = this.sanitize(video.title, '');
-        const OUTPUT = path.resolve(savePath, fileName + '.mp3');
-
-        this.log('createStream');
-
-        // On cancel download
-        const cancel = (vid: any) => {
-            this.log(`cancel => ${video.id}/${vid.id}`, vid.id);
-            readStream.destroy(new Error(``));
-            ffmpegCmd.kill();
-            if (fs.existsSync(OUTPUT)) {
-                fs.unlinkSync(OUTPUT);
-            }
-            this.mainWindow.webContents.send('onDownloadCancel', { id: video.id });
-        };
-
-        // On cancel download with error
-        const cancelError = (vid: any, err: any) => {
-            this.error(`cancel error => ${video.id}/${vid.id}`, vid.id);
-            readStream.destroy(new Error(``));
-            ffmpegCmd.kill();
-            if (fs.existsSync(OUTPUT)) {
-                fs.unlinkSync(OUTPUT);
-            }
-            this.mainWindow.webContents.send('onDownloadError', { id: video.id, error: err });
-        };
-
-        // Launch readstream
-        const readStream = ytdl(video.id, { quality: 'highestaudio' })
-        .once('response', (response) => {
-            this.log(`ytdl => START => video: ${video.id}`);
-            startDL = Date.now();
-            this.mainWindow.webContents.send('onDownloadStart', { id: video.id });
-        })
-        .on('progress', (chunkLength, downloaded, total) => {
-            const data = this.computeProgress(downloaded, total, startDL, video.id);
-            // this.log(`[DOWNLOAD] ${video.id} ytdl => PROGRESS`, data.progress.percent);
-            this.mainWindow.webContents.send('onDownloadProgress', data);
-        })
-        .on('error', (err) => {
-            this.error(`ytdl => error => video: ${video.id}`, err);
-            cancelError(video, err);
-        })
-        .on('end', () => {
-            this.log(`ytdl => END => video: ${video.id}`);
-        })
-        .on('close', () => {
-            this.log(`ytdl => CLOSE => video: ${video.id}`);
-        })
-        .on('finish', () => {
-            this.log(`ytdl => FINISH => video: ${video.id}`);
-        });
-
-        // Convert stream to mp3
-        const ffmpegCmd = ffmpeg(readStream)
-            .audioBitrate(192)
-            .audioCodec('libmp3lame')
-            .toFormat('mp3')
-            .save(OUTPUT)
-            .on('error', (err) => {
-                this.log(`ffmpeg => ERROR => video: ${video.id}`, err);
-                cancelError(video, err);
-            })
-            .on('end', () => {
-                this.log(`ffmpeg => END => video: ${video.id}`);
-                this.mainWindow.webContents.send('onDownloadEnd', { id: video.id });
-            });
-
-        ipcMain.on('cancelDownload.' + video.id, (evt, arg) => {
-            cancel(video);
-        });
-
-    }
-
-    private computeProgress(downloaded: number, total: number, startDL: number, id: string) {
+    // Compute download progress
+    private computeProgress(downloaded: number, total: number, startDL: number) {
         const floatDownloaded = downloaded / total;
         const downloadedMinutes = (Date.now() - startDL) / 1000 / 60;
         return {
-            id: id,
-            progress: {
-                percent: (floatDownloaded * 100).toFixed(2),
-                downloaded: (downloaded / 1024 / 1024).toFixed(2),
-                total: (total / 1024 / 1024).toFixed(2),
-                mn: downloadedMinutes.toFixed(2),
-                mnRest: (downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)
-            }
+            percent: (floatDownloaded * 100).toFixed(2),
+            downloaded: (downloaded / 1024 / 1024).toFixed(2),
+            total: (total / 1024 / 1024).toFixed(2),
+            mn: downloadedMinutes.toFixed(2),
+            mnRest: (downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)
         };
     }
 
@@ -345,184 +245,3 @@ export default class Download extends Logger {
         ffmpeg.setFfmpegPath(ffmpegPath);
     }
 }
-
-
-
-
-
-
-
-
-
-
-/*
-// ----------------------------------------------------------------------------
-// Download management
-
-export const streamList = {};
-
-export function initDownload(isDev) {
-
-    console.log('==============================================');
-    console.log('initDownload');
-
-    setFfmpegPath(isDev);
-
-    ipcMain.on('download', (event, arg) => {
-        console.log('=================');
-        console.log('==> onDownload');
-
-        if (!checkDownloadParam(arg, event)) {
-            return;
-        }
-
-        createStream(event, arg.video, arg.savePath);
-    });
-}
-
-function setFfmpegPath(isDev) {
-    let ffmpegPath = '';
-    const platform = os.platform();
-    const arch = 'x64'; // os.arch();
-    const ffmpegName = (platform === 'win32') ? 'ffmpeg.exe' : 'ffmpeg';
-
-    if (isDev) {
-        ffmpegPath = path.resolve(
-            app.getAppPath(),
-            '..',
-            'node_modules/ffmpeg-static/bin',
-            platform,
-            arch,
-            ffmpegName
-            );
-
-    } else {
-        ffmpegPath = path.join(process.resourcesPath, ffmpegName);
-    }
-
-    console.log('ffmpegPath', ffmpegPath);
-
-    ffmpeg.setFfmpegPath(ffmpegPath);
-}
-
-
-function createStream(event, video, savePath) {
-
-    let startDL;
-    const fileName = sanitize(video.title, '');
-    const OUTPUT = path.resolve(savePath, fileName + '.mp3');
-
-    console.log('==> createStream => ytdl');
-
-    const readStream = ytdl(video.id, { quality: 'highestaudio' })
-    .once('response', (response) => {
-        console.log(`[DOWNLOAD] ${video.id} => START`);
-        startDL = Date.now();
-        event.sender.send('onDownloadStart', { id: video.id });
-    })
-    .on('progress', (chunkLength, downloaded, total) => {
-        const data = computeProgress(downloaded, total, startDL, video.id);
-        // console.log(`[DOWNLOAD] ${video.id} ytdl => PROGRESS`, data.progress.percent);
-        event.sender.send('onDownloadProgress', data);
-    })
-    .on('error', (err) => {
-        console.log(`[DOWNLOAD] ${video.id} => ERROR => `, err);
-        cancelError(event, video, err);
-    })
-    .on('end', () => {
-        console.log(`[DOWNLOAD] ${video.id} => END`);
-    })
-    .on('close', () => {
-        console.log(`[DOWNLOAD] ${video.id} => CLOSE`);
-    })
-    .on('finish', () => {
-        console.log(`[DOWNLOAD] ${video.id} => FINISH`);
-    });
-
-    console.log('==> createStream => ffmpeg');
-
-    const ffmpegCmd = ffmpeg(readStream)
-        .audioBitrate(192)
-        .audioCodec('libmp3lame')
-        .toFormat('mp3')
-        .save(OUTPUT)
-        .on('error', (err) => {
-            console.log(`[CONVERT] ${video.id} => ERROR`, err);
-            cancelError(event, video, err);
-        })
-        .on('end', () => {
-            console.log(`[CONVERT] ${video.id} END`);
-            event.sender.send('onDownloadEnd', { id: video.id });
-        });
-
-    ipcMain.on('cancelDownload.' + video.id, (evt, arg) => {
-        cancel(evt, video);
-    });
-
-    const cancel2 = (ev, vid) => {
-        console.log(`[CANCEL] => ${video.id}/${vid.id}`, vid.id);
-        readStream.destroy(new Error(``));
-        ffmpegCmd.kill();
-        if (fs.existsSync(OUTPUT)) {
-            fs.unlinkSync(OUTPUT);
-        }
-        ev.sender.send('onDownloadCancel', { id: video.id });
-    };
-
-    const cancelError = (ev, vid, err) => {
-        console.log(`[CANCEL_ERROR] => ${video.id}/${vid.id}`, vid.id);
-        readStream.destroy(new Error(``));
-        ffmpegCmd.kill();
-        if (fs.existsSync(OUTPUT)) {
-            fs.unlinkSync(OUTPUT);
-        }
-        event.sender.send('onDownloadError', { id: video.id, error: err });
-    };
-}
-
-function computeProgress(downloaded, total, startDL, id) {
-    const floatDownloaded = downloaded / total;
-    const downloadedMinutes = (Date.now() - startDL) / 1000 / 60;
-    return {
-        id: id,
-        progress: {
-            percent: (floatDownloaded * 100).toFixed(2),
-            downloaded: (downloaded / 1024 / 1024).toFixed(2),
-            total: (total / 1024 / 1024).toFixed(2),
-            mn: downloadedMinutes.toFixed(2),
-            mnRest: (downloadedMinutes / floatDownloaded - downloadedMinutes).toFixed(2)
-        }
-    };
-}
-
-function checkDownloadParam(arg, event) {
-    console.log('[DOWNLOAD] ==> check params', arg);
-    if (!arg.savePath) {
-        handleError('[DOWNLOAD] Error, missing savePath', event.sender);
-        return false;
-    }
-    if (!arg.video) {
-        handleError('[DOWNLOAD] Error, missing video', event.sender);
-        return false;
-    }
-    console.log('[DOWNLOAD] ==> check params done!');
-    return true;
-}
-
-// Sanitize string
-function sanitize(input, replacement) {
-    const illegalRe = /[\/\?<>\\:\*\|":]/g;
-    const controlRe = /[\x00-\x1f\x80-\x9f]/g;
-    const reservedRe = /^\.+$/;
-    const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
-    const windowsTrailingRe = /[\. ]+$/;
-
-    const sanitized = input
-        .replace(illegalRe, replacement)
-        .replace(controlRe, replacement)
-        .replace(reservedRe, replacement)
-        .replace(windowsReservedRe, replacement)
-        .replace(windowsTrailingRe, replacement);
-    return sanitized;
-}
-*/
