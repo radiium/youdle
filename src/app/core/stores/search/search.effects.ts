@@ -64,12 +64,10 @@ export class SearchEffects {
 
             // Video resource
             if (action.payload.type === ResourceType.VIDEO) {
-                this.notificationsSrv.info('Video found');
                 req = this.ytSrv.getVideosById(action.payload.id);
 
             // Playlist resource
             } else if (action.payload.type === ResourceType.PLAYLIST) {
-                this.notificationsSrv.info('Playlist found');
                 req = this.ytSrv.fetchYoutubePlaylists(action.payload.id);
 
             // Empty resource
@@ -80,6 +78,7 @@ export class SearchEffects {
             return req.pipe(
                 map((data) => {
                     const items = this.utilsSrv.parseVideoList(data['items'] || data);
+                    this.notificationsSrv.info(`${items.length} item${items.length > 1 ? 's' : ''} found!`);
                     this.store$.dispatch(new VideoListActionSetItems(items));
                     this.store$.dispatch(new SearchActionFetchResourceSuccess());
                 }),
@@ -95,7 +94,6 @@ export class SearchEffects {
     fetchResourceError$ = this.actions$.pipe(
         ofType<SearchActionFetchResourceError>(SearchActionTypes.FETCH_RESOURCE_ERROR),
         map((action) => {
-            this.notificationsSrv.error('Something went wrong...');
             this.store$.dispatch(new VideoListActionEmptyState());
             return new AppStateActionHideIsSearching();
         })
