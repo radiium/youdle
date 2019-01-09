@@ -43,4 +43,9 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
     decrement() {
         this.apiSrv.decrementConcurrentDownload();
     }
+
+    onMediaTypeChange(event) {
+        this.apiSrv.setMediaType(event.value);
+
+    }
 }

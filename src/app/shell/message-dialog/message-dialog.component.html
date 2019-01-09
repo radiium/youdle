@@ -2,7 +2,7 @@
 
     <!-- Dialog header -->
     <mat-toolbar class="dialogHeader">
-        <div class="textBar flexSpacer">Message</div>
+        <div class="textBar flexSpacer">Download end</div>
         <button class="iconBtn" [mat-dialog-close]="true">
             <mat-icon svgIcon="check"></mat-icon>
         </button>
@@ -12,16 +12,38 @@
     <div mat-dialog-content>
 
         <!-- Message -->
-        <div class="messageBox" *ngIf="messageState">
-            <div class="messageTitle messageItem" *ngIf="messageState.title">{{ messageState.title }}</div>
-            <div class="messageIcon messageItem">
-                <img src="assets/icons/checked.svg" *ngIf="messageState.type === 'SUCCESS'">
-                <img src="assets/icons/cancel.svg" *ngIf="messageState.type !== 'SUCCESS'">
-                <!--
-                    *ngIf="message.type === 'ERROR' || message.type === 'CANCEL'"
-                -->
+        <div class="messageBox">
+            <div class="messageItemBox">
+
+                <div class="messageItem success" *ngIf="message.successCount > 0">
+                    <div class="itemCount">{{ message.successCount }}</div>
+                    <div class="itemDesc">Success</div>
+                </div>
+
+                <div class="messageItem cancel" *ngIf="message.cancelCount > 0">
+                    <div class="itemCount">{{ message.cancelCount }}</div>
+                    <div class="itemDesc">Cancel</div>
+                </div>
+
+                <div class="messageItem error" *ngIf="message.errorCount > 0">
+                    <div class="itemCount">{{ message.errorCount }}</div>
+                    <div class="itemDesc">Error</div>
+                </div>
             </div>
-            <div class="messageDesc messageItem" *ngIf="messageState.description">{{ messageState.description }}</div>
+
+            <div class="errorTitle">Error:</div>
+
+            <div class="errorBox" *ngIf="message.errorCount > 0 && message.error">
+                <div class="theError">{{  message.error }}</div>
+            </div>
         </div>
+
     </div>
 </div>
+
+
+<!--
+                    <img src="assets/icons/checked.svg" >
+                    <img src="assets/icons/cancel.svg" >
+                    *ngIf="message.type === 'ERROR' || message.type === 'CANCEL'"
+                -->

@@ -22,6 +22,16 @@
     }
 
     .dialogContainer {
+        height: 100%;
+
+        .mat-dialog-content {
+            height: 100%;
+            max-height: calc(100% - 56px);
+            margin: 0;
+            padding: 16px;
+
+            overflow-y: hidden !important;
+        }
 
         .dialogHeader {
             color: white;
@@ -29,7 +39,7 @@
         }
 
         .dialogContent {
-            padding: 24px;
+            padding: 16px;
         }
     }
 }

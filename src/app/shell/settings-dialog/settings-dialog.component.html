@@ -13,31 +13,50 @@
         <div class="dialogContent">
 
             <!-- Set Save path -->
-            <div class="labelRow">save as:</div>
-            <div class="settingsRow">
-                <div class="settingsInputWrapper" (click)="editSavePath()">
-                    <div class="settingsInput">{{ settingsState.savePath }}</div>
-                    <button class="settingsBtn">
-                        <mat-icon svgIcon="pencil"></mat-icon>
-                    </button>
+            <fieldset class="FormRow">
+                <legend>Save as:</legend>
+                <div class="settingsRow">
+                    <div class="settingsInputWrapper" (click)="editSavePath()">
+                        <div class="settingsInput">{{ settingsState.savePath }}</div>
+                        <button class="settingsBtn">
+                            <mat-icon svgIcon="pencil"></mat-icon>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
 
             <!-- Set Concurrent download -->
-            <div class="labelRow otherRow">Simultaneous download:</div>
-            <div class="settingsRow">
-                <div class="concurrentDownloadInputWrapper">
-                    <button class="settingsBtn" (click)="decrement()">
-                        <mat-icon svgIcon="minus-circle-outline"></mat-icon>
-                    </button>
-                    <div class="settingsInput settingsInputConcDl" type="number">
-                        {{ settingsState.concurrentDownload }}
+            <fieldset class="FormRow">
+                <legend>Simultaneous download:</legend>
+                <div class="settingsRow">
+                    <div class="concurrentDownloadInputWrapper">
+                        <button class="settingsBtn" (click)="decrement()">
+                            <mat-icon svgIcon="minus-circle-outline"></mat-icon>
+                        </button>
+                        <div class="settingsInput settingsInputConcDl" type="number">
+                            {{ settingsState.concurrentDownload }}
+                        </div>
+                        <button class="settingsBtn" (click)="increment()">
+                            <mat-icon svgIcon="plus-circle-outline"></mat-icon>
+                        </button>
                     </div>
-                    <button class="settingsBtn" (click)="increment()">
-                        <mat-icon svgIcon="plus-circle-outline"></mat-icon>
-                    </button>
                 </div>
-            </div>
+            </fieldset>
+
+            <!-- Set Save path -->
+            <fieldset class="FormRow">
+                <legend>Media type:</legend>
+                <div class="settingsRow">
+                    <div class="settingsMediaTypeWrapper">
+                        <mat-button-toggle-group appearance="legacy"
+                            [ngModel]="settingsState.mediaType"
+                            (change)="onMediaTypeChange($event)">
+                            <mat-button-toggle value="AUDIO" [disableRipple]="true">Audio</mat-button-toggle>
+                            <mat-button-toggle value="VIDEO" [disableRipple]="true">Video</mat-button-toggle>
+                            </mat-button-toggle-group>
+                    </div>
+                </div>
+            </fieldset>
 
         </div>
     </div>

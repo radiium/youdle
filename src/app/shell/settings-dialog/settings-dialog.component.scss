@@ -1,17 +1,42 @@
 .dialogContainer {
 
-    .labelRow {
-        width: 100%;
-        font-size: 1.2rem;
-        color: #E4E4E4;
-        margin: 0 0 5px 0;
-        &.otherRow{
-            margin-top: 35px;
+    .FormRow {
+        border-radius: 12px;
+        margin-bottom: 30px;
+        border: 1px solid #E4E4E4;
+
+        legend {
+            font-size: 1.2rem;
+            color: #E4E4E4;
         }
     }
 
     .settingsRow {
         display: flex;
+        margin: 5px;
+
+        .settingsMediaTypeWrapper {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #E4E4E4;
+
+            .mat-button-toggle-group {
+                box-shadow: unset;
+                height: 34px;
+
+                .mat-button-toggle {
+                    color: white;
+                    height: 34px;
+
+                    &.mat-button-toggle-checked {
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+
+                    &:hover:not(.mat-button-toggle-checked) {
+                        background-color: rgba(255, 255, 255, 0.2);
+                    }
+                }
+            }
+        }
 
         .settingsInputWrapper {
             display: flex;
@@ -21,9 +46,11 @@
             color: #E4E4E4;
             cursor: pointer;
             padding-right: 10px;
+            width: 100%;
+            justify-content: space-between;
 
             &:hover {
-                background-color: rgba(255, 255, 255, 0.1);
+                background-color: rgba(255, 255, 255, 0.2);
             }
         }
 
@@ -38,14 +65,14 @@
                 width: 34px;
                 height: 34px;
                 &:hover {
-                    background-color: rgba(255, 255, 255, 0.1);
+                    background-color: rgba(255, 255, 255, 0.2);
                 }
             }
         }
 
         .settingsInput {
             font-size: 1.2rem;
-            padding: 4px 15px 3px 15px;//0 8px 0 8px;
+            padding: 3px 15px 4px 8px;
             max-width: 100%;
             display: flex;
             word-break: break-all;
