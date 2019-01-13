@@ -83,7 +83,11 @@
                         <div class="progressText">{{ element.progress.percent }}%</div>
                     </div>
 
-                    <div class="progress" *ngIf="element.status !== 'NONE' && element.status !== 'SUCCESS'">
+                    <div class="progress" *ngIf="
+                        element.status !== 'NONE'
+                     && element.status !== 'SUCCESS'
+                     && element.status !== 'CANCEL'
+                     && element.status !== 'ERROR'">
                         <mat-progress-spinner class="miniSpinner" *ngIf="element.progress"
                             [color]="primary" [mode]="'determinate'" [value]="element.progress.percent">
                         </mat-progress-spinner>
@@ -100,8 +104,15 @@
                         </div>
                     -->
 
-                    <img [src]="element.thumb" alt=""
+                    <img *ngIf="element.status !== 'CANCEL' && element.status !== 'ERROR' && element.status !== 'SUCCESS'"
+                        [src]="element.thumb"
                         [class.hidded]="element.status !== 'NONE' && element.progress">
+
+                    <img *ngIf="element.status === 'CANCEL' || element.status === 'ERROR'"
+                        src="assets/icons/cancel.svg">
+
+                    <img *ngIf="element.status === 'SUCCESS'"
+                        src="assets/icons/checked.svg">
                 </div>
             </mat-cell>
         </ng-container>
