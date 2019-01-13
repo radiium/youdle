@@ -31,9 +31,9 @@
                 </div>
             </div>
 
-            <div class="errorTitle">Error:</div>
-
-            <div class="errorBox" *ngIf="message.errorCount > 0 && message.error">
+            <!-- Error -->
+            <div class="errorTitle" *ngIf="message.errorCount > 0 && message.error">Error:</div>
+            <div class="errorBox"   *ngIf="message.errorCount > 0 && message.error">
                 <div class="theError">{{  message.error }}</div>
             </div>
         </div>

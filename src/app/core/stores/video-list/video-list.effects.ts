@@ -21,10 +21,12 @@ import {
     VideoListActionUpdateItemsSuccess,
     VideoListActionCancelDownload,
     VideoListActionCancelDownloadSuccess,
+    VideoListActionEmptyState,
 
 } from './video-list.actions';
 import { ApiService } from '@core/services/api.service';
 import { DownloadService } from '@core/services/download.service';
+import { SearchActionClearInputValue } from '../search';
 
 @Injectable()
 export class VideoListEffects {
@@ -44,8 +46,6 @@ export class VideoListEffects {
             this.store$.select('SettingsState')
         ),
         mergeMap(data => {
-            console.log('startDownload', data);
-
             const selectedItems = data[1].selectedItems;
             const settings = data[2];
             this.downloadSrv.startDownloadVideo(selectedItems, settings);

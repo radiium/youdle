@@ -34,7 +34,6 @@ export class AppStateActionUnsetIsDownloading implements Action {
     constructor() {}
 }
 
-
 export type AppStateActions =
     | AppStateActionSetAppState
     | AppStateActionShowIsSearching
