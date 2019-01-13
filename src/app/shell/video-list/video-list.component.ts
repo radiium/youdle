@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -11,6 +11,7 @@ import { AppState } from '@core/stores/app-state';
     selector: 'app-video-list',
     templateUrl: './video-list.component.html',
     styleUrls: ['./video-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoListComponent implements OnInit {
     count = {
