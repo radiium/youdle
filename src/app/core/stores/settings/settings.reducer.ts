@@ -4,7 +4,7 @@ import { SettingsActions, SettingsActionTypes } from './settings.actions';
 export const initialState: SettingsState = {
     savePath: '',
     concurrentDownload: 3,
-    mediaType: MediaType.VIDEO
+    mediaType: MediaType.AUDIO
 };
 
 export function settingsReducer(
