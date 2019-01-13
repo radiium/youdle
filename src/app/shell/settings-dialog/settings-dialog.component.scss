@@ -1,9 +1,17 @@
 .dialogContainer {
 
+    .dialogContent {
+        height: 100%;
+        overflow-y: auto;
+    }
+
     .FormRow {
         border-radius: 12px;
-        margin-bottom: 30px;
         border: 1px solid #E4E4E4;
+        margin-bottom: 16px;
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         legend {
             font-size: 1.2rem;
