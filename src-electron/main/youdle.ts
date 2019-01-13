@@ -38,7 +38,7 @@ export default class Youdle {
     private static electronPath = path.join(__dirname, 'node_modules', '.bin', 'electron');
     private static appUrlDev = 'http://localhost:4200';
     private static appUrlProd = url.format({
-        pathname: path.join(__dirname, 'renderer', 'index.html'),
+        pathname: path.resolve(__dirname, '..', 'renderer', 'index.html'),
         protocol: 'file:',
         slashes: true,
     });
@@ -75,8 +75,13 @@ export default class Youdle {
         this.mainWindow.once('ready-to-show', () => this.mainWindow.show());
         // this.mainWindow.webContents.openDevTools();
 
+
         // Build menus
-        const menus: Array<any> = [fileMenuTemplate, editMenuTemplate];
+        const devMenu = devMenuTemplate;
+        devMenu.submenu = devMenu.submenu.filter((item) => {
+            return item.label !== 'Reload';
+        });
+        const menus: Array<any> = [fileMenuTemplate, editMenuTemplate, devMenuTemplate];
         Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
     }
 
@@ -145,6 +150,10 @@ export default class Youdle {
             this.mainWindow.webContents.session.clearStorageData({}, () => {
                 this.log('clearStorageData');
             });
+
+            this.savePath.destroy();
+            this.storage.destroy();
+            this.download.destroy();
         }
     }
 
