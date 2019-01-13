@@ -22,7 +22,7 @@
     "youtube downloader",
     "youtube to mp3"
   ],
-  "main": "electron.js",
+  "main": "index.js",
   "private": true,
   "scripts": {
     "test": "ng test",
