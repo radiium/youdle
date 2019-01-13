@@ -32,8 +32,15 @@ export class VideoListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.apiSrv.getAppState().subscribe(data => this.appState = data);
-        this.apiSrv.getSearchState().subscribe(data => this.searchState = data);
+        this.apiSrv.getAppState().subscribe(data => {
+            this.appState = data;
+            this.cdRef.detectChanges();
+        });
+
+        this.apiSrv.getSearchState().subscribe(data => {
+            this.searchState = data;
+            this.cdRef.detectChanges();
+        });
 
         this.apiSrv.getItems().subscribe(data => {
             this.dataSource = new MatTableDataSource<VideoListItem>(data);
@@ -61,12 +68,14 @@ export class VideoListComponent implements OnInit {
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
         this.apiSrv.setSelectedItems(this.selection.selected);
+        this.cdRef.detectChanges();
     }
 
     itemToggle(item: VideoListItem, event: any) {
         if (event && this.dataSource.data.length > 1) {
             this.selection.toggle(item);
             this.apiSrv.setSelectedItems(this.selection.selected);
+            this.cdRef.detectChanges();
         }
     }
 

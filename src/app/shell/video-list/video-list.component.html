@@ -3,49 +3,49 @@
     <!-- Toolbar -->
     <div class="videoListToolbar">
 
-        <div class="loader" *ngIf="appState.isSearching">
+        <div class="loader" *ngIf="appState?.isSearching">
             <app-loader></app-loader>
         </div>
 
-        <div class="noResultMsg" *ngIf="dataSource.data.length === 0 && searchState.inputValue !== '' && !appState.isSearching">
+        <div class="noResultMsg" *ngIf="dataSource?.data.length === 0 && searchState?.inputValue !== '' && !appState?.isSearching">
             <div>Nothing found...</div>
         </div>
 
-        <div class="toolbarControl" *ngIf="dataSource.data.length > 0 && !appState.isSearching"
-            [class.borderToolBar]="dataSource.data.length > 0">
+        <div class="toolbarControl" *ngIf="dataSource?.data.length > 0 && !appState?.isSearching"
+            [class.borderToolBar]="dataSource?.data.length > 0">
 
-            <mat-checkbox class="masterSelect" *ngIf="dataSource.data.length > 1"
+            <mat-checkbox class="masterSelect" *ngIf="dataSource?.data.length > 1"
                 (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
-                [disabled]="appState.isDownloading"
+                [checked]="selection?.hasValue() && isAllSelected()"
+                [indeterminate]="selection?.hasValue() && !isAllSelected()"
+                [disabled]="appState?.isDownloading"
                 [color]="'primary'"
                 >
             </mat-checkbox>
 
-            <div class="counter" *ngIf="dataSource.data.length > 0">
-                <span *ngIf="dataSource.data.length > 1">{{ selection.selected.length }}/</span>
-                <span>{{ dataSource.data.length }} </span>
+            <div class="counter" *ngIf="dataSource?.data.length > 0">
+                <span *ngIf="dataSource?.data.length > 1">{{ selection?.selected.length }}/</span>
+                <span>{{ dataSource?.data.length }} </span>
                 <span> Track</span>
-                <span *ngIf="selection.selected.length > 1">s</span>
+                <span *ngIf="selection?.selected.length > 1">s</span>
             </div>
 
-            <div class="flexSpacer" *ngIf="dataSource.data.length > 0"></div>
+            <div class="flexSpacer" *ngIf="dataSource?.data.length > 0"></div>
 
             <button class="control" mat-button
-                *ngIf="(dataSource.data.length > 0) && !appState.isDownloading"
-                [class.anim]="selection.selected.length > 0"
-                [disabled]="selection.selected.length === 0"
-                [class.controlDisabled]="selection.selected.length === 0"
+                *ngIf="(dataSource?.data.length > 0) && !appState?.isDownloading"
+                [class.anim]="selection?.selected.length > 0"
+                [disabled]="selection?.selected.length === 0"
+                [class.controlDisabled]="selection?.selected.length === 0"
                 (click)="startDownload()">
                 <mat-icon class="controlIcon" svgIcon="cloud-download"></mat-icon>
                 <span class="controlText">Download</span>
             </button>
 
             <button class="control" mat-button
-                *ngIf="appState.isDownloading"
-                [class.anim]="selection.selected.length > 0"
-                [class.controlDisabled]="selection.selected.length === 0"
+                *ngIf="appState?.isDownloading"
+                [class.anim]="selection?.selected.length > 0"
+                [class.controlDisabled]="selection?.selected.length === 0"
                 (click)="cancelDownload()">
                 <mat-icon class="controlIcon" svgIcon="close-octagon-outline"></mat-icon>
                 <span class="controlText">Cancel</span>
@@ -61,8 +61,8 @@
                 <mat-checkbox
                     (click)="$event.stopPropagation()"
                     (change)="itemToggle(row, $event)"
-                    [checked]="selection.isSelected(row) || element.status !== 'NONE' || dataSource.data.length === 1"
-                    [disabled]="appState.isDownloading || dataSource.data.length === 1"
+                    [checked]="selection?.isSelected(row) || element.status !== 'NONE' || dataSource?.data.length === 1"
+                    [disabled]="appState?.isDownloading || dataSource?.data.length === 1"
                     [color]="'primary'"
                     >
                 </mat-checkbox>
