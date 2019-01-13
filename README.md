@@ -36,7 +36,7 @@ npm run release:all
 
 - [angular 7](https://angular.io/) and [angular-cli](https://github.com/angular/angular-cli)
 - [angular material](https://material.angular.io/)
-- [electron](https://electron.atom.io/), [electron builder](https://github.com/electron-userland/electron-builder/) and [ngx-electron](https://github.com/ThorstenHans/ngx-electron)
+- [electron](https://electron.atom.io/), [electron builder](https://github.com/electron-userland/electron-builder/)
 - [RxJS](http://reactivex.io/rxjs/)
 - [node-ytdl-core](https://github.com/fent/node-ytdl-core)
 - [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)

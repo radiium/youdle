@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxElectronModule } from 'ngx-electron';
 import { MatIconRegistry, MatIconModule } from '@angular/material';
 
 import { CustomMaterialModule } from './modules/material/custom-material.module';
@@ -28,7 +27,6 @@ const mdi = require('@mdi/angular-material/mdi.svg') as string;
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxElectronModule,
         MatIconModule,
         CustomMaterialModule
     ],
@@ -38,7 +36,6 @@ const mdi = require('@mdi/angular-material/mdi.svg') as string;
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxElectronModule,
         MatIconModule,
         CustomMaterialModule,
         DurationPipe
