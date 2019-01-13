@@ -7,6 +7,9 @@ import { SettingsState } from '@core/stores/settings/settings.model';
 import { DownloadStatus, Progress, VideoListItem } from '@core/stores/video-list/video-list.model';
 import { Message } from '@core/models';
 import { ElectronDownloadService } from './electron/electron-download.service';
+import { Store } from '@ngrx/store';
+import { VideoListActionEmptyState } from '@core/stores/video-list/video-list.actions';
+import { SearchActionClearInputValue } from '@core/stores/search/search.actions';
 
 @Injectable()
 export class DownloadService {
@@ -16,6 +19,7 @@ export class DownloadService {
     settings: SettingsState;
 
     constructor(
+    private store$: Store<any>,
     private ngZone: NgZone,
     private downLoadSrv: ElectronDownloadService,
     private dialogSrv: DialogService,
@@ -127,16 +131,19 @@ export class DownloadService {
             };
 
             this.allEnded = true;
-            const notif = new Notification('Youdle', { body: '' });
+            const notif = new Notification('Youdle', { body: `Download end!` });
             this.apiSrv.unsetIsDownloading();
 
             this.ngZone.run(() => {
                 this.dialogSrv.openMessageDialog(message, () => {});
             });
+            this.store$.dispatch(new VideoListActionEmptyState());
+            this.store$.dispatch(new SearchActionClearInputValue());
         }
     }
 
     setVideoStatus(item: VideoListItem, status: DownloadStatus, progress?: Progress) {
+        item = _.cloneDeep(item);
         if (item) {
             item.status = status;
             item.progress = progress ? progress : item.progress;
