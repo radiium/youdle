@@ -12,8 +12,14 @@ import { SettingsEffects } from './settings';
 
 @NgModule({
     imports: [
-        StoreModule.forRoot(rootReducer , { metaReducers }),
-        EffectsModule.forRoot([SearchEffects, SettingsEffects, VideoListEffects]),
+        StoreModule.forRoot(rootReducer, {
+            metaReducers: metaReducers
+        }),
+        EffectsModule.forRoot([
+            SearchEffects,
+            SettingsEffects,
+            VideoListEffects
+        ]),
         StoreDevtoolsModule.instrument({
             maxAge: 25,
             logOnly: environment.production,
