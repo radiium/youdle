@@ -12,12 +12,12 @@ export class ElectronSavePathService extends ElectronService {
     public getDefaultSavePath() {
         if (!this.isElectronApp) { return EMPTY; }
         this.ipcRenderer.send('get-default-save-path');
-        return this.getResponseEvent('get-default-save-path-resp');
+        return this.getResponseEvent('get-default-save-path-resp', true);
     }
 
     public editSavePath(savePath) {
         if (!this.isElectronApp) { return EMPTY; }
         this.ipcRenderer.send('edit-save-path', { savePath: savePath });
-        return this.getResponseEvent('edit-save-path-resp');
+        return this.getResponseEvent('edit-save-path-resp', true);
     }
 }

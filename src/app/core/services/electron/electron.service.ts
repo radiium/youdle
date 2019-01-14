@@ -32,7 +32,7 @@ export class ElectronService {
     }
 
     // Handle response
-    protected getResponseEvent(eventKey: string) {
+    protected getResponseEvent(eventKey: string, removeAfter?: boolean) {
         return new Observable((obs) => {
             this.ipcRenderer.on(eventKey, (event: any, error: any, ...args: any) => {
                 if (error) {
@@ -41,7 +41,9 @@ export class ElectronService {
                     obs.next(args);
                 }
                 // obs.complete();
-                // this.ipcRenderer.removeAllListeners(eventKey);
+                if (removeAfter) {
+                    this.ipcRenderer.removeAllListeners(eventKey);
+                }
             });
         });
     }
