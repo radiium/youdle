@@ -30,7 +30,7 @@ mac:
     - from: "node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg"
       to: ""
   target:
-    - dmg
+    - zip
 dmg:
   icon: "build/icons/mac/icon.icns"
   iconSize: 128
