@@ -1,6 +1,18 @@
 import { SettingsState, MediaType } from './settings.model';
 import { SettingsActions, SettingsActionTypes } from './settings.actions';
 
+const incrementValue = (value: number) => {
+    value++;
+    if (value > 10) { value = 10; }
+    return value;
+};
+
+const decrementValue = (value: number) => {
+    value--;
+    if (value < 1) { value = 1; }
+    return value;
+};
+
 export const initialState: SettingsState = {
     savePath: '',
     concurrentDownload: 3,
@@ -49,15 +61,3 @@ export function settingsReducer(
             return state;
     }
 }
-
-const incrementValue = (value: number) => {
-    value++;
-    if (value > 10) { value = 10; }
-    return value;
-};
-
-const decrementValue = (value: number) => {
-    value--;
-    if (value < 1) { value = 1; }
-    return value;
-};
