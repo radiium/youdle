@@ -1,5 +1,6 @@
 import { ActionReducer, MetaReducer } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { environment } from '@env/environment';
 
 export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
     return (state, action) => {
@@ -14,6 +15,6 @@ export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
 }
 
 export const metaReducers: MetaReducer<any>[] = [
-    logger,
-    storeFreeze
+    storeFreeze,
+    environment.production ? logger : null,
 ];
