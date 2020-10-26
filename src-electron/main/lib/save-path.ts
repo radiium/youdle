@@ -55,7 +55,7 @@ export default class SavePath extends Logger {
             ]
         };
 
-        dialog.showOpenDialog(dialogOption, (selFilePath) => {
+        dialog.showOpenDialog(dialogOption).then((selFilePath) => {
             console.log('TESTT => ', selFilePath[0]);
             this.mainWindow.webContents.send('edit-save-path-resp', null, selFilePath[0]);
         });

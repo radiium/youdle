@@ -141,13 +141,13 @@ export default class Youdle {
     // Clear cache and cookie session before quit
     private static onBeforeQuit() {
         if (!this.isDev()) {
-            this.mainWindow.webContents.session.clearAuthCache({ type: 'password' }, () => {
+            this.mainWindow.webContents.session.clearAuthCache().then(() => {
                 this.log('clearAuthCache');
             });
-            this.mainWindow.webContents.session.clearCache(() => {
+            this.mainWindow.webContents.session.clearCache().then(() => {
                 this.log('clearCache');
             });
-            this.mainWindow.webContents.session.clearStorageData({}, () => {
+            this.mainWindow.webContents.session.clearStorageData().then(() => {
                 this.log('clearStorageData');
             });
 
