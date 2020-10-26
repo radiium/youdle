@@ -87,7 +87,7 @@ export default class Youdle {
 
     private static createMainWindowDev() {
         this.mainWindow = new BrowserWindow(this.mainWindowParams);
-        require('devtron').install();
+        // require('devtron').install();
         require('electron-reload')(__dirname, {
             electron: this.electronPath,
             hardResetMethod: 'exit'
