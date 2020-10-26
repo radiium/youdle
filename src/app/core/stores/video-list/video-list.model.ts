@@ -1,4 +1,3 @@
-import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
 export interface VideoListState {

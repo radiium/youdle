@@ -1,6 +1,4 @@
 import { Action } from '@ngrx/store';
-import { MatTableDataSource } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
 import { VideoListState, VideoListItem } from './video-list.model';
 
 export enum VideoListActionTypes {

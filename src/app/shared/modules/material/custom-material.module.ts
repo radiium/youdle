@@ -1,74 +1,26 @@
 import { NgModule,  } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { OverlayModule } from '@angular/cdk/overlay';
-
-import {
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatBadgeModule,
-    MatDividerModule,
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatPseudoCheckboxModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const matModule = [
     OverlayModule,
-
-    MatAutocompleteModule,
     MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
+    MatPseudoCheckboxModule,
     MatDialogModule,
-    MatExpansionModule,
-    MatGridListModule,
     MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
-    MatSortModule,
     MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatBadgeModule,
-    MatDividerModule,
+    MatToolbarModule
 ];
 
 

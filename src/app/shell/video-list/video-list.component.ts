@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { SearchState } from '@stores/search';
@@ -23,7 +22,7 @@ export class VideoListComponent implements OnInit {
     searchState: SearchState;
 
     displayedColumns: string[] = ['selected', 'thumbnail', 'meta', 'title'];
-    dataSource = new MatTableDataSource<VideoListItem>([]);
+    dataSource: VideoListItem[] = [];
     selection = new SelectionModel<VideoListItem>(true, []);
 
     constructor(
@@ -43,7 +42,7 @@ export class VideoListComponent implements OnInit {
         });
 
         this.apiSrv.getItems().subscribe(data => {
-            this.dataSource = new MatTableDataSource<VideoListItem>(data);
+            this.dataSource = data;
             if (data.length === 1) {
                 this.selection.select(data[0]);
                 this.apiSrv.setSelectedItems(this.selection.selected);
@@ -59,20 +58,20 @@ export class VideoListComponent implements OnInit {
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
+        const numRows = this.dataSource.length;
         return numSelected === numRows;
     }
 
     masterToggle() {
         this.isAllSelected() ?
         this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+        this.dataSource.forEach(row => this.selection.select(row));
         this.apiSrv.setSelectedItems(this.selection.selected);
         this.cdRef.detectChanges();
     }
 
     itemToggle(item: VideoListItem, event: any) {
-        if (event && this.dataSource.data.length > 1) {
+        if (event && this.dataSource.length > 1) {
             this.selection.toggle(item);
             this.apiSrv.setSelectedItems(this.selection.selected);
             this.cdRef.detectChanges();

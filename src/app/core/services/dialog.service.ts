@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import {MatDialog } from '@angular/material/dialog';
 
 import { SettingsDialogComponent } from '@shell/settings-dialog/settings-dialog.component';
 import { MessageDialogComponent } from '@shell/message-dialog/message-dialog.component';

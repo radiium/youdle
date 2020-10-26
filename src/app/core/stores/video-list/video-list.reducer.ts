@@ -1,6 +1,3 @@
-import { MatTableDataSource } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-
 import { VideoListState, VideoListItem } from './video-list.model';
 import { videoListActions, VideoListActionTypes } from './video-list.actions';
 

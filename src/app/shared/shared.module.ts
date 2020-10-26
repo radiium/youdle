@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconRegistry, MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry} from '@angular/material/icon';
 
 import { CustomMaterialModule } from './modules/material/custom-material.module';
 import { DurationPipe } from './pipes/duration.pipe';
