@@ -10,7 +10,7 @@ import { MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import { CustomMaterialModule } from './modules/material/custom-material.module';
 import { DurationPipe } from './pipes/duration.pipe';
 
-const mdi = require('@mdi/angular-material/mdi.svg') as string;
+// const mdi = require('@mdi/angular-material/mdi.svg') as string;
 
 
 @NgModule({
@@ -46,6 +46,7 @@ export class SharedModule {
     constructor(
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer) {
-        matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl(mdi));
+        // matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl(mdi));
+        matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/icons/mdi.svg'));
     }
 }

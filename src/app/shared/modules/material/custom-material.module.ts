@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const matModule = [
     OverlayModule,
@@ -20,9 +21,9 @@ const matModule = [
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCheckboxModule
 ];
-
 
 @NgModule({
     imports: [
