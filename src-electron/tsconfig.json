@@ -5,6 +5,8 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "suppressImplicitAnyIndexErrors": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
       "sourceMap": false,
       "baseUrl": ".",
       "target": "es5",
