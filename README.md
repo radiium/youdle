@@ -34,9 +34,9 @@ npm run release:all
 
 ## Made with
 
-- [angular 7](https://angular.io/) and [angular-cli](https://github.com/angular/angular-cli)
+- [angular 10](https://angular.io/) and [angular-cli](https://github.com/angular/angular-cli)
 - [angular material](https://material.angular.io/)
-- [electron](https://electron.atom.io/), [electron builder](https://github.com/electron-userland/electron-builder/)
+- [electron 10](https://electron.atom.io/), [electron builder](https://github.com/electron-userland/electron-builder/)
 - [RxJS](http://reactivex.io/rxjs/)
 - [node-ytdl-core](https://github.com/fent/node-ytdl-core)
 - [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
