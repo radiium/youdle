@@ -27,7 +27,7 @@ mac:
   category: "public.app-category.entertainment"
   identity: null
   extraResources:
-    - from: "node_modules/ffmpeg-static/bin/darwin/x64/ffmpeg"
+    - from: "node_modules/ffmpeg-static/ffmpeg"
       to: ""
   target:
     - zip
@@ -51,7 +51,7 @@ linux:
   description: "Desktop Youtube mp3 downloader"
   maintainer: "Radiium <remip.dev@gmail.com>"
   extraResources:
-    - from: "node_modules/ffmpeg-static/bin/linux/x64/ffmpeg"
+    - from: "node_modules/ffmpeg-static/ffmpeg"
       to: ""
   target:
     - deb
@@ -61,7 +61,7 @@ linux:
 win:
   icon: "build/icons/win/icon.ico"
   extraResources:
-    - from: "node_modules/ffmpeg-static/bin/win32/x64/ffmpeg.exe"
+    - from: "node_modules/ffmpeg-static/ffmpeg.exe"
       to: ""
   target:
     - nsis
