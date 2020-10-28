@@ -1,18 +1,15 @@
 
 
 import { app, ipcMain, BrowserWindow } from 'electron';
-import * as ytdl from 'ytdl-core';
-import * as ffmpeg from 'fluent-ffmpeg';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
-import * as _ from 'lodash';
-
+import ytdl from 'ytdl-core';
+import ffmpeg from 'fluent-ffmpeg';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import _ from 'lodash';
 import videoPreset from './presets/video';
 import audioPreset from './presets/audio';
-
 import Logger from './logger';
-import { Readable } from 'stream';
 
 interface Item {
     video: any;
@@ -102,7 +99,7 @@ export default class Download extends Logger {
                 readStream.destroy(new Error(``));
             }
             if (ffmpegCmd) {
-                ffmpegCmd.kill();
+                ffmpegCmd.kill(null);
             }
             if (fs.existsSync(PARTIAL)) {
                 fs.unlinkSync(PARTIAL);
@@ -140,7 +137,7 @@ export default class Download extends Logger {
         };
 
         const onError = (err: any) => {
-            this.log(`[ERROR] => ${video.id}`);
+            this.log(`[ERROR] => ${video.id}`, err);
             cancel();
             onDownload(DownloadStatus.ERROR, null, err);
         };
@@ -155,7 +152,10 @@ export default class Download extends Logger {
         /// Convert (fluent-ffmpeg)
         // Convert ytdl Readable stream with ffmpeg
         const ffmpegCmd = ffmpeg(readStream, { presets: './presets' })
-            .preset(preset)
+            // .preset(preset)
+            .audioBitrate(192)
+            .audioCodec('libmp3lame')
+            .toFormat('mp3')
             .on('error', onError.bind(this))
             .on('end', onConvertEnd.bind(this))
             .save(PARTIAL);
@@ -223,10 +223,10 @@ export default class Download extends Logger {
             ffmpegPath = path.resolve(
                 app.getAppPath(),
                 '..',
-                'node_modules/ffmpeg-static/bin',
-                platform,
-                arch,
-                ffmpegName
+                'node_modules/ffmpeg-static/ffmpeg',
+                // platform,
+                // arch,
+                // ffmpegName
             );
 
         } else {

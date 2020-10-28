@@ -1,6 +1,7 @@
 
 import { ipcMain, app, dialog, BrowserWindow, OpenDialogOptions } from 'electron';
 import storage = require('electron-json-storage');
+import { OpenDialogReturnValue } from 'electron/main';
 import Logger from './logger';
 
 export default class SavePath extends Logger {
@@ -55,9 +56,9 @@ export default class SavePath extends Logger {
             ]
         };
 
-        dialog.showOpenDialog(dialogOption).then((selFilePath) => {
-            console.log('TESTT => ', selFilePath[0]);
-            this.mainWindow.webContents.send('edit-save-path-resp', null, selFilePath[0]);
+        dialog.showOpenDialog(dialogOption).then((value: OpenDialogReturnValue) => {
+            console.log('TESTT => ', value);
+            this.mainWindow.webContents.send('edit-save-path-resp', null, value.filePaths[0]);
         });
     }
 }
