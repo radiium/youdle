@@ -1,6 +1,6 @@
 {
   "name": "youdle",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "license": "MIT",
   "description": "Desktop Youtube mp3 downloader",
   "homepage": "https://github.com/radiium/youdle",
@@ -41,9 +41,9 @@
     "release": "npm run build:all && electron-builder build --config electron-builder.yml"
   },
   "dependencies": {
-    "electron-context-menu": "^0.11.0",
+    "electron-context-menu": "^2.3.0",
     "electron-json-storage": "^4.2.0",
-    "electron-log": "^3.0.1",
+    "electron-log": "^4.2.4",
     "fluent-ffmpeg": "^2.1.2",
     "tslib": "^2.0.0",
     "ytdl-core": "^4.0.0",
